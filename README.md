@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CryptoLens
+
+AI-powered crypto research platform for spot traders. Live prices, deep
+research, and news sentiment analysis using Claude AI.
+
+## Tech Stack
+
+- **Next.js 16** (App Router, TypeScript, Turbopack)
+- **Tailwind CSS v4** for styling
+- **Anthropic Claude** — Haiku 4.5 (fast/cheap), Sonnet 4.6 (deep analysis)
+- **CoinGecko API** for live market data
+- **TradingView Widget** for charts
+- **CryptoPanic** for news headlines
+
+## Features (MVP)
+
+- Top 50 market overview with global stats
+- Coin detail pages with TradingView chart + AI research note
+- News feed with AI sentiment classification (bullish/bearish/neutral)
+- Streaming AI chat for crypto Q&A
+- Deep research index page
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Set up environment variables
+
+```bash
+cp .env.example .env.local
+```
+
+Then edit `.env.local` and add at minimum your `ANTHROPIC_API_KEY`. The site
+will run without keys but AI features will show an error state.
+
+### 3. Run dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3000>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `ANTHROPIC_API_KEY` | Yes (for AI) | Powers AI summary, sentiment, and chat |
+| `COINGECKO_API_KEY` | No | Higher rate limits for market data |
+| `CRYPTOPANIC_API_TOKEN` | No (for news) | Live news headlines |
+| `NEXT_PUBLIC_SUPABASE_URL` | Future | Auth + watchlists |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Future | Auth + watchlists |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/
+│   ├── page.tsx              # Landing — top 50 markets
+│   ├── coin/[id]/page.tsx    # Coin detail with chart + AI
+│   ├── news/page.tsx         # News + AI sentiment
+│   ├── chat/page.tsx         # AI chat
+│   ├── research/page.tsx     # Research index
+│   └── api/
+│       ├── ai-summary/       # Sonnet 4.6 — research note
+│       ├── sentiment/        # Haiku 4.5 — headline sentiment
+│       └── chat/             # Haiku 4.5 — streaming chat
+├── components/               # UI components
+├── lib/
+│   ├── coingecko.ts          # Market data client
+│   ├── anthropic.ts          # Claude client + model IDs
+│   ├── news.ts               # CryptoPanic client
+│   ├── format.ts             # Number/date formatting
+│   └── utils.ts              # cn() helper
+└── types/
+    └── crypto.ts             # Shared types
+```
 
-## Deploy on Vercel
+## AI Model Strategy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Tier | Model | Used for | Cost (per 1M tok) |
+|------|-------|----------|-------------------|
+| Fast | Claude Haiku 4.5 | Chat, news sentiment | ~$1 / $5 |
+| Smart | Claude Sonnet 4.6 | Coin research notes | ~$3 / $15 |
+| Premium | Claude Opus 4.7 | Future paid tier | ~$15 / $75 |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Responses are cached for 30 minutes via `Cache-Control: s-maxage=1800`.
+
+## Deployment
+
+Deploy to Vercel:
+
+```bash
+npx vercel
+```
+
+Set the environment variables in your Vercel project settings.
+
+## Disclaimer
+
+This software is for research and educational purposes only. It does **not**
+constitute financial advice. Always do your own research before making trading
+decisions.

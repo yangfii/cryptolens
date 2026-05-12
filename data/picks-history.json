@@ -1,0 +1,316 @@
+{
+  "snapshots": [
+    {
+      "id": "snap_1778523987875",
+      "generatedAt": "2026-05-11T18:26:27.875Z",
+      "picks": [
+        {
+          "coinId": "bitcoin",
+          "symbol": "BTC",
+          "name": "Bitcoin",
+          "image": "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+          "priceAtPick": 81910,
+          "category": "Store of Value",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "ethereum",
+          "symbol": "ETH",
+          "name": "Ethereum",
+          "image": "https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628",
+          "priceAtPick": 2337.64,
+          "category": "Smart Contract Platform (L1)",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "solana",
+          "symbol": "SOL",
+          "name": "Solana",
+          "image": "https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1718769756",
+          "priceAtPick": 97.46,
+          "category": "Smart Contract Platform (L1)",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "chainlink",
+          "symbol": "LINK",
+          "name": "Chainlink",
+          "image": "https://coin-images.coingecko.com/coins/images/877/large/Chainlink_Logo_500.png?1760023405",
+          "priceAtPick": 10.62,
+          "category": "Oracle / DeFi Infrastructure",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "cardano",
+          "symbol": "ADA",
+          "name": "Cardano",
+          "image": "https://coin-images.coingecko.com/coins/images/975/large/cardano.png?1696502090",
+          "priceAtPick": 0.280987,
+          "category": "Smart Contract Platform (L1)",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "avalanche-2",
+          "symbol": "AVAX",
+          "name": "Avalanche",
+          "image": "https://coin-images.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png?1696512369",
+          "priceAtPick": 10.17,
+          "category": "Smart Contract Platform (L1) / Subnets",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "zcash",
+          "symbol": "ZEC",
+          "name": "Zcash",
+          "image": "https://coin-images.coingecko.com/coins/images/486/large/circle-zcash-color.png?1696501740",
+          "priceAtPick": 563.45,
+          "category": "Privacy / Store of Value",
+          "riskLevel": "high"
+        },
+        {
+          "coinId": "sui",
+          "symbol": "SUI",
+          "name": "Sui",
+          "image": "https://coin-images.coingecko.com/coins/images/26375/large/sui-ocean-square.png?1727791290",
+          "priceAtPick": 1.3,
+          "category": "Smart Contract Platform (L1)",
+          "riskLevel": "high"
+        }
+      ]
+    },
+    {
+      "id": "snap_1778524004716",
+      "generatedAt": "2026-05-11T18:26:44.716Z",
+      "picks": [
+        {
+          "coinId": "bitcoin",
+          "symbol": "BTC",
+          "name": "Bitcoin",
+          "image": "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+          "priceAtPick": 81910,
+          "category": "Store of Value",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "ethereum",
+          "symbol": "ETH",
+          "name": "Ethereum",
+          "image": "https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628",
+          "priceAtPick": 2337.64,
+          "category": "Layer 1 / Smart Contract Platform",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "binancecoin",
+          "symbol": "BNB",
+          "name": "BNB",
+          "image": "https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970",
+          "priceAtPick": 662.83,
+          "category": "Exchange Token / Layer 1",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "solana",
+          "symbol": "SOL",
+          "name": "Solana",
+          "image": "https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1718769756",
+          "priceAtPick": 97.46,
+          "category": "Layer 1 / High-Performance Blockchain",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "chainlink",
+          "symbol": "LINK",
+          "name": "Chainlink",
+          "image": "https://coin-images.coingecko.com/coins/images/877/large/Chainlink_Logo_500.png?1760023405",
+          "priceAtPick": 10.62,
+          "category": "DeFi Infrastructure / Oracle Network",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "avalanche-2",
+          "symbol": "AVAX",
+          "name": "Avalanche",
+          "image": "https://coin-images.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png?1696512369",
+          "priceAtPick": 10.17,
+          "category": "Layer 1 / Enterprise Blockchain",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "the-open-network",
+          "symbol": "TON",
+          "name": "Toncoin",
+          "image": "https://coin-images.coingecko.com/coins/images/17980/large/photo_2024-09-10_17.09.00.jpeg?1725963446",
+          "priceAtPick": 2.34,
+          "category": "Layer 1 / Social / Messaging Infrastructure",
+          "riskLevel": "high"
+        },
+        {
+          "coinId": "sui",
+          "symbol": "SUI",
+          "name": "Sui",
+          "image": "https://coin-images.coingecko.com/coins/images/26375/large/sui-ocean-square.png?1727791290",
+          "priceAtPick": 1.3,
+          "category": "Layer 1 / Move-based Ecosystem",
+          "riskLevel": "high"
+        }
+      ]
+    },
+    {
+      "id": "snap_1778524367200",
+      "generatedAt": "2026-05-11T18:32:47.200Z",
+      "picks": [
+        {
+          "coinId": "bitcoin",
+          "symbol": "BTC",
+          "name": "Bitcoin",
+          "image": "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+          "priceAtPick": 81911,
+          "category": "Store of Value",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "ethereum",
+          "symbol": "ETH",
+          "name": "Ethereum",
+          "image": "https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628",
+          "priceAtPick": 2338.11,
+          "category": "Smart Contract Platform / L1",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "binancecoin",
+          "symbol": "BNB",
+          "name": "BNB",
+          "image": "https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970",
+          "priceAtPick": 662.83,
+          "category": "Exchange Token / L1 Ecosystem",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "solana",
+          "symbol": "SOL",
+          "name": "Solana",
+          "image": "https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1718769756",
+          "priceAtPick": 97.47,
+          "category": "High-Performance L1",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "chainlink",
+          "symbol": "LINK",
+          "name": "Chainlink",
+          "image": "https://coin-images.coingecko.com/coins/images/877/large/Chainlink_Logo_500.png?1760023405",
+          "priceAtPick": 10.62,
+          "category": "Oracle Infrastructure / DeFi",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "cardano",
+          "symbol": "ADA",
+          "name": "Cardano",
+          "image": "https://coin-images.coingecko.com/coins/images/975/large/cardano.png?1696502090",
+          "priceAtPick": 0.280985,
+          "category": "Smart Contract Platform / L1",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "zcash",
+          "symbol": "ZEC",
+          "name": "Zcash",
+          "image": "https://coin-images.coingecko.com/coins/images/486/large/circle-zcash-color.png?1696501740",
+          "priceAtPick": 563.48,
+          "category": "Privacy / Store of Value",
+          "riskLevel": "high"
+        },
+        {
+          "coinId": "the-open-network",
+          "symbol": "TON",
+          "name": "Toncoin",
+          "image": "https://coin-images.coingecko.com/coins/images/17980/large/photo_2024-09-10_17.09.00.jpeg?1725963446",
+          "priceAtPick": 2.34,
+          "category": "Layer-1 / Consumer Blockchain",
+          "riskLevel": "high"
+        }
+      ]
+    },
+    {
+      "id": "snap_1778524371629",
+      "generatedAt": "2026-05-11T18:32:51.629Z",
+      "picks": [
+        {
+          "coinId": "bitcoin",
+          "symbol": "BTC",
+          "name": "Bitcoin",
+          "image": "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+          "priceAtPick": 81920,
+          "category": "Store of Value",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "ethereum",
+          "symbol": "ETH",
+          "name": "Ethereum",
+          "image": "https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628",
+          "priceAtPick": 2338.4,
+          "category": "Smart Contract Platform / L1",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "binancecoin",
+          "symbol": "BNB",
+          "name": "BNB",
+          "image": "https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970",
+          "priceAtPick": 662.72,
+          "category": "Exchange Token / L1 Ecosystem",
+          "riskLevel": "low"
+        },
+        {
+          "coinId": "solana",
+          "symbol": "SOL",
+          "name": "Solana",
+          "image": "https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1718769756",
+          "priceAtPick": 97.46,
+          "category": "L1 / Smart Contract Platform",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "chainlink",
+          "symbol": "LINK",
+          "name": "Chainlink",
+          "image": "https://coin-images.coingecko.com/coins/images/877/large/Chainlink_Logo_500.png?1760023405",
+          "priceAtPick": 10.63,
+          "category": "Oracle / DeFi Infrastructure",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "avalanche-2",
+          "symbol": "AVAX",
+          "name": "Avalanche",
+          "image": "https://coin-images.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png?1696512369",
+          "priceAtPick": 10.17,
+          "category": "L1 / Smart Contract Platform",
+          "riskLevel": "medium"
+        },
+        {
+          "coinId": "zcash",
+          "symbol": "ZEC",
+          "name": "Zcash",
+          "image": "https://coin-images.coingecko.com/coins/images/486/large/circle-zcash-color.png?1696501740",
+          "priceAtPick": 563.62,
+          "category": "Privacy / Store of Value",
+          "riskLevel": "high"
+        },
+        {
+          "coinId": "the-open-network",
+          "symbol": "TON",
+          "name": "Toncoin",
+          "image": "https://coin-images.coingecko.com/coins/images/17980/large/photo_2024-09-10_17.09.00.jpeg?1725963446",
+          "priceAtPick": 2.34,
+          "category": "L1 / Consumer Blockchain",
+          "riskLevel": "high"
+        }
+      ]
+    }
+  ]
+}
