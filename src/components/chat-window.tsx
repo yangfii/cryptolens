@@ -125,7 +125,7 @@ export default function ChatWindow() {
   }
 
   return (
-    <div className="premium-card rounded-2xl flex flex-col h-[640px] fade-up">
+    <div className="premium-card rounded-2xl flex flex-col h-[calc(100dvh-12rem)] min-h-[480px] sm:h-[640px] fade-up">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
         <div className="flex items-center gap-3">

@@ -122,8 +122,8 @@ export default function AllocatorResults({
     <div className="space-y-6 fade-up">
       {/* STRATEGY OVERVIEW */}
       <div className="premium-card rounded-2xl p-6">
-        <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/[0.06]">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-3 flex-wrap mb-4 pb-4 border-b border-white/[0.06]">
+          <div className="flex items-center gap-3 min-w-0">
             <div className="icon-tile text-accent" style={{ width: 40, height: 40 }}>
               <Sparkles className="w-4 h-4" />
             </div>

@@ -33,10 +33,11 @@ export default function Header() {
           </Link>
           <Link
             href="/allocator"
-            className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex items-center gap-1.5"
+            aria-label={t("nav.allocator")}
+            className="px-2 sm:px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex items-center gap-1.5"
           >
             <PieChart className="w-3.5 h-3.5" />
-            {t("nav.allocator")}
+            <span className="hidden sm:inline">{t("nav.allocator")}</span>
           </Link>
           <Link
             href="/research"

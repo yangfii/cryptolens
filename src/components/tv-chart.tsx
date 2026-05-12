@@ -72,7 +72,7 @@ export default function TradingViewChart({ symbol, height = 700 }: Props) {
         title={`${symbol.toUpperCase()} price chart`}
         style={{
           width: "100%",
-          height: `${height}px`,
+          height: `clamp(360px, 70dvh, ${height}px)`,
           border: 0,
           display: "block",
         }}

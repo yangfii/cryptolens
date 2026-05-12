@@ -2,10 +2,12 @@ export default function Sparkline({
   data,
   width = 120,
   height = 36,
+  responsive = false,
 }: {
   data: number[];
   width?: number;
   height?: number;
+  responsive?: boolean;
 }) {
   if (!data || data.length < 2) return null;
   const min = Math.min(...data);
@@ -22,10 +24,12 @@ export default function Sparkline({
   const up = data[data.length - 1] >= data[0];
   return (
     <svg
-      width={width}
+      width={responsive ? "100%" : width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio={responsive ? "none" : "xMidYMid meet"}
       aria-hidden="true"
+      className={responsive ? "block" : undefined}
     >
       <path
         d={path}

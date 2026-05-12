@@ -91,7 +91,7 @@ export default function FeaturedCoinCard({
 
       {coin.sparkline_in_7d?.price && (
         <div className="-mx-2 mb-4">
-          <Sparkline data={coin.sparkline_in_7d.price} width={300} height={56} />
+          <Sparkline data={coin.sparkline_in_7d.price} width={300} height={56} responsive />
         </div>
       )}
 
