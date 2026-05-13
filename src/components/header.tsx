@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Sparkles, PieChart, Menu, X } from "lucide-react";
+import { Sparkles, PieChart, Target, Menu, X } from "lucide-react";
 import { useLang } from "./lang-provider";
 import LangToggle from "./lang-toggle";
 import ThemeToggle from "./theme-toggle";
@@ -57,6 +57,13 @@ export default function Header() {
           >
             <PieChart className="w-3.5 h-3.5" />
             {t("nav.allocator")}
+          </Link>
+          <Link
+            href="/recommend"
+            className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex items-center gap-1.5"
+          >
+            <Target className="w-3.5 h-3.5" />
+            {t("nav.recommend")}
           </Link>
           <Link
             href="/research"
@@ -132,6 +139,14 @@ export default function Header() {
               >
                 <PieChart className="w-4 h-4" />
                 {t("nav.allocator")}
+              </Link>
+              <Link
+                href="/recommend"
+                onClick={close}
+                className="flex items-center gap-2 px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
+              >
+                <Target className="w-4 h-4" />
+                {t("nav.recommend")}
               </Link>
               <Link
                 href="/research"

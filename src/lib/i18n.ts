@@ -13,6 +13,7 @@ export const translations: Record<Lang, Dict> = {
     "nav.news": "News",
     "nav.research": "Research",
     "nav.allocator": "Allocator",
+    "nav.recommend": "Picks",
     "nav.chat": "AI Chat",
 
     // Hero
@@ -167,6 +168,7 @@ export const translations: Record<Lang, Dict> = {
     "nav.news": "ព័ត៌មាន",
     "nav.research": "ស្រាវជ្រាវ",
     "nav.allocator": "បែងចែក",
+    "nav.recommend": "យោបល់",
     "nav.chat": "AI ឆាត",
 
     // Hero
