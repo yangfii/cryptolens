@@ -8,7 +8,6 @@ import {
   Coins,
   Brain,
   Newspaper,
-  MessageSquare,
 } from "lucide-react";
 import { getGlobalData, getTopCoins } from "@/lib/coingecko";
 import CoinTable from "@/components/coin-table";
@@ -226,12 +225,12 @@ export default function HomePage() {
             Two models, purpose-built for traders
           </h2>
           <p className="text-sm text-muted leading-relaxed">
-            We route every request to the right Claude model — fast and cheap
-            for chat, deep and analytical for research.
+            We route every request to the right Claude model — balanced and
+            analytical for research, fast for headline sentiment.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-4">
+        <div className="grid lg:grid-cols-2 gap-4">
           <div className="premium-card rounded-2xl p-7">
             <div className="icon-tile mb-5 text-accent">
               <Brain className="w-5 h-5" />
@@ -270,24 +269,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="premium-card rounded-2xl p-7">
-            <div className="icon-tile mb-5" style={{ color: "#a78bfa" }}>
-              <MessageSquare className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-xl mb-2 tracking-tight">
-              AI Trading Assistant
-            </h3>
-            <p className="text-sm text-muted leading-relaxed mb-5">
-              Ask anything about coins, tokenomics, or concepts. Streaming
-              responses tuned for spot traders.
-            </p>
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider">
-              <span className="px-2 py-1 rounded bg-violet/10 text-violet border border-violet/20 font-bold" style={{ color: "#a78bfa", borderColor: "rgba(167, 139, 250, 0.2)", background: "rgba(167, 139, 250, 0.1)" }}>
-                Haiku 4.5
-              </span>
-              <span className="text-muted">streaming · &lt;1s start</span>
-            </div>
-          </div>
         </div>
       </section>
       </ScrollReveal>

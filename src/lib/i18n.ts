@@ -14,7 +14,6 @@ export const translations: Record<Lang, Dict> = {
     "nav.research": "Research",
     "nav.allocator": "Allocator",
     "nav.recommend": "Picks",
-    "nav.chat": "AI Chat",
 
     // Hero
     "hero.badge_powered_by": "Powered by",
@@ -91,16 +90,13 @@ export const translations: Record<Lang, Dict> = {
     "ai_showcase.section_label": "AI Engine",
     "ai_showcase.section_title": "Two models, purpose-built for traders",
     "ai_showcase.section_subtitle":
-      "We route every request to the right Claude model — fast and cheap for chat, deep and analytical for research.",
+      "We route every request to the right Claude model — balanced and analytical for research, fast for headline sentiment.",
     "ai_showcase.deep_research_title": "Deep Research Notes",
     "ai_showcase.deep_research_desc":
       "Claude Sonnet 4.6 reviews live market data and produces balanced bullish/bearish breakdowns for every coin.",
     "ai_showcase.sentiment_title": "News Sentiment",
     "ai_showcase.sentiment_desc":
       "Every headline is classified bullish, bearish, or neutral — scan the market mood in seconds.",
-    "ai_showcase.chat_title": "AI Trading Assistant",
-    "ai_showcase.chat_desc":
-      "Ask anything about coins, tokenomics, or concepts. Streaming responses tuned for spot traders.",
 
     // Markets table
     "markets.section_label": "All Markets",
@@ -144,12 +140,6 @@ export const translations: Record<Lang, Dict> = {
     "allocator.disclaimer":
       "AI-generated suggestions only — not financial advice. Always do your own research and never invest more than you can afford to lose.",
 
-    // Chat
-    "chat.label": "AI Assistant",
-    "chat.title": "Ask CryptoLens",
-    "chat.subtitle":
-      "Ask Claude Haiku 4.5 about any coin, concept, or trading topic. Streaming responses tuned for spot traders.",
-
     // Research
     "research.label": "AI-Powered Research",
     "research.title": "Deep Research",
@@ -169,7 +159,6 @@ export const translations: Record<Lang, Dict> = {
     "nav.research": "ស្រាវជ្រាវ",
     "nav.allocator": "បែងចែក",
     "nav.recommend": "យោបល់",
-    "nav.chat": "AI ឆាត",
 
     // Hero
     "hero.badge_powered_by": "ដំណើរការដោយ",
@@ -246,16 +235,13 @@ export const translations: Record<Lang, Dict> = {
     "ai_showcase.section_label": "AI Engine",
     "ai_showcase.section_title": "AI ​ពីរ​មុខ​សម្រាប់​ Traders",
     "ai_showcase.section_subtitle":
-      "យើង​ប្រើ​ Claude ​​ដែល​​​ត្រឹម​ត្រូវ​សម្រាប់​​ការ​ងារ​នី​មួយ​ៗ — ​លឿន​សម្រាប់​ឆាត, ស៊ីជម្រៅ​សម្រាប់​​​ស្រាវ​​ជ្រាវ។",
+      "យើង​ប្រើ​ Claude ​​ដែល​​​ត្រឹម​ត្រូវ​សម្រាប់​​ការ​ងារ​នី​មួយ​ៗ — ​ស៊ីជម្រៅ​សម្រាប់​​​ស្រាវ​​ជ្រាវ, លឿន​សម្រាប់​ Sentiment ព័ត៌មាន​។",
     "ai_showcase.deep_research_title": "ការ​ស្រាវ​ជ្រាវ​ស៊ីជម្រៅ",
     "ai_showcase.deep_research_desc":
       "Claude Sonnet 4.6 ​​​មើល​​ទិន្នន័យ​ផ្ទាល់​ ហើយ​​​​បង្កើត​ការ​​​ភាគ​យល់ bullish/bearish ​ឲ្យ​​កាក់​នី​មួយ​ៗ​។",
     "ai_showcase.sentiment_title": "ការ​វិភាគ Sentiment",
     "ai_showcase.sentiment_desc":
       "​​​​​​ព័ត៌មាន​នី​មួយៗ​​ត្រូវ​បាន​​ប្រែ​ជា bullish, bearish ឬ neutral — ​មើល mood ទីផ្សារ​​ក្នុង​​​​​វិនាទី​ៗ​។",
-    "ai_showcase.chat_title": "AI Trading Assistant",
-    "ai_showcase.chat_desc":
-      "​​សួរ​អ្វី​ក៏​បាន​​​អំពី​​​​កាក់, tokenomics ឬ​​ concepts ផ្សេង​ៗ​​​។",
 
     // Markets table
     "markets.section_label": "ទីផ្សារ​ទាំង​អស់",
@@ -298,12 +284,6 @@ export const translations: Record<Lang, Dict> = {
     "allocator.analyzing": "កំពុង​វិភាគ​ទីផ្សារ​​ដោយ​​ Sonnet 4.6…",
     "allocator.disclaimer":
       "ការ​​ផ្តល់​យោបល់​​ដោយ AI តែ​ប៉ុណ្ណោះ​ — ​​មិនមែន​​ការ​ផ្តល់​ប្រឹក្សា​ហិរញ្ញ​វត្ថុ​​​ទេ​​​។ ​ស្រាវ​ជ្រាវ​​ដោយ​​ខ្លួន​ឯង មុន​នឹង​​​​វិនិយោគ។",
-
-    // Chat
-    "chat.label": "AI Assistant",
-    "chat.title": "សួរ CryptoLens",
-    "chat.subtitle":
-      "​សួរ​ Claude Haiku 4.5 ​ពី​​​កាក់, concept ​ឬ​​​ប្រធាន​បទ​ trading ​ផ្សេង​ៗ​​​។",
 
     // Research
     "research.label": "ស្រាវ​ជ្រាវ​​ដោយ AI",
