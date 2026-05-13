@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Sparkles, PieChart, Menu, X } from "lucide-react";
+import { Sparkles, PieChart, Plug2, Menu, X } from "lucide-react";
 import { useLang } from "./lang-provider";
 import LangToggle from "./lang-toggle";
 import ThemeToggle from "./theme-toggle";
@@ -63,6 +63,13 @@ export default function Header() {
             className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex"
           >
             {t("nav.research")}
+          </Link>
+          <Link
+            href="/trader"
+            className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex items-center gap-1.5"
+          >
+            <Plug2 className="w-3.5 h-3.5" />
+            {t("nav.trader")}
           </Link>
           <ThemeToggle />
           <LangToggle />
@@ -139,6 +146,14 @@ export default function Header() {
                 className="block px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
               >
                 {t("nav.research")}
+              </Link>
+              <Link
+                href="/trader"
+                onClick={close}
+                className="flex items-center gap-2 px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
+              >
+                <Plug2 className="w-4 h-4" />
+                {t("nav.trader")}
               </Link>
               <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center gap-2 flex-wrap">
                 <ThemeToggle />
