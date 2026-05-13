@@ -76,7 +76,10 @@ export default function EquityChart({ deals }: Props) {
                 fontSize: 12,
               }}
               labelFormatter={(t) => new Date(t as number).toLocaleString()}
-              formatter={(v: number) => [v.toLocaleString(), "Cumulative P/L"]}
+              formatter={(value) => [
+                Number(value).toLocaleString(),
+                "Cumulative P/L",
+              ]}
             />
             <Area type="monotone" dataKey="equity" stroke="#22d3ee" strokeWidth={2} fill="url(#equityFill)" />
           </AreaChart>
