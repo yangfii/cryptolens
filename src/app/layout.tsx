@@ -66,6 +66,12 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ThemeProvider>
           <LangProvider>
+            <div className="site-bg" aria-hidden="true">
+              <div className="site-bg__grid" />
+              <div className="site-bg__orb site-bg__orb--accent" />
+              <div className="site-bg__orb site-bg__orb--violet" />
+              <div className="site-bg__orb site-bg__orb--cyan" />
+            </div>
             <ScrollProgress />
             <div className="relative z-10 flex flex-col flex-1">
               <Header />

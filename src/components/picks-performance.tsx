@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import {
   Trophy,
   TrendingUp,
@@ -9,7 +7,8 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { getRecentSnapshotsWithPerformance } from "@/lib/picks-history";
-import { formatRelativeTime, formatPercent } from "@/lib/format";
+import { formatPercent } from "@/lib/format";
+import SnapshotCard from "./snapshot-card";
 
 export default async function PicksPerformance() {
   const { snapshots, overallStats } = await getRecentSnapshotsWithPerformance(5);
@@ -127,123 +126,14 @@ export default async function PicksPerformance() {
       </div>
 
       {/* Recent snapshots */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {snapshots.map((snap, snapIdx) => (
-          <div key={snap.id} className="premium-card rounded-2xl p-4 sm:p-5">
-            <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-              <div className="flex items-center gap-3">
-                <div
-                  className="icon-tile text-accent"
-                  style={{ width: 36, height: 36 }}
-                >
-                  <Trophy className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold">
-                    {snapIdx === 0 ? "Latest Picks" : `Snapshot #${snapshots.length - snapIdx}`}
-                  </div>
-                  <div className="text-xs text-muted">
-                    Generated {formatRelativeTime(snap.generatedAt)}
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 text-xs">
-                <div>
-                  <span className="text-muted">Avg: </span>
-                  <span
-                    className={`font-bold tabular-nums ${
-                      snap.avgChangePct >= 0 ? "text-success" : "text-danger"
-                    }`}
-                  >
-                    {formatPercent(snap.avgChangePct)}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-muted">Win rate: </span>
-                  <span className="font-bold tabular-nums">
-                    {snap.winRate.toFixed(0)}%
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-              <table className="w-full text-sm min-w-[420px]">
-                <thead className="text-muted text-[10px] uppercase tracking-[0.15em] font-semibold">
-                  <tr className="border-b border-white/[0.06]">
-                    <th className="text-left pb-2 pr-3">Coin</th>
-                    <th className="text-right pb-2 pr-3 hidden sm:table-cell">
-                      Risk
-                    </th>
-                    <th className="text-right pb-2 pr-3">Pick Price</th>
-                    <th className="text-right pb-2 pr-3">Current</th>
-                    <th className="text-right pb-2">P&amp;L</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {snap.picks.map((p) => (
-                    <tr
-                      key={p.coinId}
-                      className="border-b border-white/[0.04] last:border-0"
-                    >
-                      <td className="py-2.5 pr-3">
-                        <Link
-                          href={`/coin/${p.coinId}`}
-                          className="flex items-center gap-2 hover:text-accent transition-colors"
-                        >
-                          <Image
-                            src={p.image}
-                            alt={p.name}
-                            width={20}
-                            height={20}
-                            className="rounded-full"
-                            unoptimized
-                          />
-                          <span className="font-semibold text-xs">
-                            {p.symbol}
-                          </span>
-                          <span className="text-muted text-xs hidden sm:inline">
-                            {p.name}
-                          </span>
-                        </Link>
-                      </td>
-                      <td className="py-2.5 pr-3 text-right hidden sm:table-cell">
-                        <span
-                          className="text-[9px] px-1.5 py-0.5 rounded uppercase tracking-wider font-semibold"
-                          style={{
-                            color:
-                              p.riskLevel === "low"
-                                ? "#22d3ee"
-                                : p.riskLevel === "medium"
-                                ? "#fbbf24"
-                                : "#f43f5e",
-                          }}
-                        >
-                          {p.riskLevel}
-                        </span>
-                      </td>
-                      <td className="py-2.5 pr-3 text-right tabular-nums text-xs">
-                        ${p.priceAtPick.toFixed(p.priceAtPick > 1 ? 2 : 4)}
-                      </td>
-                      <td className="py-2.5 pr-3 text-right tabular-nums text-xs font-semibold">
-                        ${p.currentPrice.toFixed(p.currentPrice > 1 ? 2 : 4)}
-                      </td>
-                      <td className="py-2.5 text-right">
-                        <span
-                          className={`tabular-nums font-bold text-xs ${
-                            p.changePct >= 0 ? "text-success" : "text-danger"
-                          }`}
-                        >
-                          {p.changePct >= 0 ? "+" : ""}
-                          {p.changePct.toFixed(2)}%
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <SnapshotCard
+            key={snap.id}
+            snap={snap}
+            title={snapIdx === 0 ? "Latest Picks" : `Snapshot #${snapshots.length - snapIdx}`}
+            defaultExpanded={snapIdx === 0}
+          />
         ))}
       </div>
 
