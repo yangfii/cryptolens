@@ -63,7 +63,7 @@ export default function AiSummary({ coinId }: Props) {
           </div>
           <div>
             <div className="text-sm font-bold flex items-center gap-2">
-              CryptoLens AI
+              Sastra trader AI
               <span className="pulse-dot" />
             </div>
             <div className="text-xs text-muted">
@@ -115,7 +115,7 @@ export default function AiSummary({ coinId }: Props) {
           </div>
           <div>
             <div className="text-sm font-bold flex items-center gap-2">
-              CryptoLens AI Research
+              Sastra trader AI Research
               <span className="pulse-dot" />
             </div>
             <div className="text-[10px] text-muted font-mono uppercase tracking-wider">

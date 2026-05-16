@@ -82,7 +82,7 @@ export default function NewsAlerts({ items }: { items: NewsItem[] }) {
     // Fire one notification per match (capped at 3 to avoid spam)
     for (const m of matches.slice(0, 3)) {
       try {
-        new Notification(`🔔 CryptoLens Alert`, {
+        new Notification(`🔔 Sastra trader Alert`, {
           body: m.title,
           icon: m.imageUrl || "/favicon.ico",
           tag: m.id,

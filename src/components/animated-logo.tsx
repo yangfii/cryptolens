@@ -6,9 +6,9 @@ type Props = {
 };
 
 /**
- * Animated CryptoLens logo:
+ * Animated Sastra trader logo:
  * - Premium gold gradient background (existing `.logo-premium` style)
- * - A "C" monogram in the center
+ * - An "S" monogram in the center
  * - An orbiting arc with a glowing dot rotating around it (the "lens" effect)
  * - Subtle outer glow that pulses
  */
@@ -55,9 +55,9 @@ export default function AnimatedLogo({ size = 36, className = "" }: Props) {
         </circle>
       </svg>
 
-      {/* The "C" monogram */}
+      {/* The "S" monogram */}
       <span className="relative z-10 text-accent-foreground font-black text-[length:inherit]">
-        C
+        S
       </span>
     </span>
   );

@@ -24,9 +24,9 @@ const kantumruyPro = Kantumruy_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "CryptoLens — Crypto Research for Spot Traders",
+  title: "Sastra trader | Markets Research",
   description:
-    "AI-powered crypto research and analysis platform for spot traders. Live prices, news sentiment, and deep research on top cryptocurrencies.",
+    "AI-powered markets research and analysis platform for spot traders. Live prices, news sentiment, and deep research on top cryptocurrencies.",
   keywords: ["crypto", "research", "spot trading", "bitcoin", "ethereum", "AI analysis"],
 };
 

@@ -33,7 +33,7 @@ export default function Header() {
         >
           <AnimatedLogo size={36} className="text-base" />
           <span className="tracking-tight">
-            Crypto<span className="text-brand-gradient">Lens</span>
+            Sastra <span className="text-brand-gradient">trader</span>
           </span>
         </Link>
 

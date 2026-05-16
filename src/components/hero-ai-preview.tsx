@@ -28,11 +28,11 @@ export default function HeroAiPreview() {
       <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/[0.06]">
         <div className="flex items-center gap-2">
           <span className="logo-premium inline-grid place-items-center w-7 h-7 rounded-lg text-accent-foreground font-black text-xs">
-            C
+            S
           </span>
           <div>
             <div className="text-xs font-semibold flex items-center gap-1.5">
-              CryptoLens AI
+              Sastra trader AI
               <span className="text-[9px] font-mono text-accent/80 px-1.5 py-0.5 rounded bg-accent/10 border border-accent/20">
                 SONNET 4.6
               </span>

@@ -4,8 +4,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 text-sm text-muted">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           <div>
-            <div className="font-semibold text-foreground mb-1">CryptoLens</div>
-            <div>AI-powered crypto research for spot traders.</div>
+            <div className="font-semibold text-foreground mb-1">Sastra trader</div>
+            <div>AI-powered markets research for spot traders.</div>
           </div>
           <div className="text-xs">
             <p>

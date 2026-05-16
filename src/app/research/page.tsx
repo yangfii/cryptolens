@@ -6,7 +6,7 @@ export const revalidate = 300;
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Deep Research | CryptoLens",
+  title: "Deep Research | Sastra trader",
   description:
     "AI-powered deep research reports on top cryptocurrencies for spot traders.",
 };

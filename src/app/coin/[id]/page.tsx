@@ -32,11 +32,11 @@ export async function generateMetadata({
   try {
     const coin = await getCoinDetail(id);
     return {
-      title: `${coin.name} (${coin.symbol.toUpperCase()}) — Price, Charts, AI Analysis | CryptoLens`,
+      title: `${coin.name} (${coin.symbol.toUpperCase()}) — Price, Charts, AI Analysis | Sastra trader`,
       description: `Live ${coin.name} price, market data, technical chart, and AI-powered spot trading analysis.`,
     };
   } catch {
-    return { title: "Coin not found | CryptoLens" };
+    return { title: "Coin not found | Sastra trader" };
   }
 }
 

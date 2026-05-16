@@ -7,7 +7,7 @@ export const revalidate = 300;
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Crypto News with AI Sentiment | CryptoLens",
+  title: "Crypto News with AI Sentiment | Sastra trader",
   description:
     "Latest crypto news headlines, automatically classified as bullish, bearish, or neutral by Claude AI.",
 };

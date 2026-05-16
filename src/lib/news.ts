@@ -43,7 +43,7 @@ const FALLBACK: NewsItem[] = [
     id: "fallback-1",
     title: "News feed temporarily unavailable",
     url: "#",
-    source: "CryptoLens",
+    source: "Sastra trader",
     published_at: new Date().toISOString(),
     description: "News providers are unreachable. This usually resolves quickly.",
     sentiment: "neutral",
