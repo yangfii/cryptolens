@@ -136,16 +136,16 @@ export default async function PicksPerformance({ connectedBroker }: Props = {}) 
         </div>
       </div>
 
-      {/* Recent snapshots */}
+      {/* Latest snapshot only */}
       <div className="space-y-3">
-        {snapshots.map((snap, snapIdx) => (
+        {snapshots[0] && (
           <SnapshotCard
-            key={snap.id}
-            snap={snap}
-            title={snapIdx === 0 ? "Latest Picks" : `Snapshot #${snapshots.length - snapIdx}`}
-            defaultExpanded={snapIdx === 0}
+            key={snapshots[0].id}
+            snap={snapshots[0]}
+            title="Latest Picks"
+            defaultExpanded
           />
-        ))}
+        )}
       </div>
 
       {/* Disclaimer */}
