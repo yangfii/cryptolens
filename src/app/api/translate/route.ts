@@ -1,6 +1,11 @@
 import { NextRequest } from "next/server";
 import { getAnthropic, MODELS } from "@/lib/anthropic";
-import { callGemini, GEMINI_MODELS, isGeminiConfigured } from "@/lib/gemini";
+import {
+  callGemini,
+  GEMINI_MODELS,
+  isGeminiConfigured,
+  type GeminiSchema,
+} from "@/lib/gemini";
 import {
   isMicrosoftTranslatorConfigured,
   translateBatch as msTranslateBatch,
@@ -95,21 +100,64 @@ async function translateWithMicrosoft(
   return { results, model: "microsoft-translator" };
 }
 
+const KHMER_SYSTEM_INSTRUCTION =
+  "You are an expert cryptocurrency market analyst and a professional English-to-Khmer translator. Translate cryptocurrency news headlines and descriptions into natural, professional, and easy-to-understand Khmer. Retain essential financial and crypto acronyms (e.g., BTC, XRP, API, DeFi) if translating them would make the meaning awkward. Preserve numerical values and proper nouns. Keep the tone factual and concise.";
+
+const ENGLISH_SYSTEM_INSTRUCTION =
+  "You are a professional translator specializing in financial and cryptocurrency news. Translate the given Khmer text into clear, natural English. Preserve crypto acronyms, numerical values, and proper nouns. Keep the tone factual and concise.";
+
+const TRANSLATION_SCHEMA: GeminiSchema = {
+  type: "ARRAY",
+  items: {
+    type: "OBJECT",
+    properties: {
+      id: { type: "STRING" },
+      title: { type: "STRING" },
+      description: { type: "STRING" },
+    },
+    required: ["id", "title"],
+  },
+};
+
 async function translateWithGemini(
   body: TranslateBody
 ): Promise<{ results: TranslatedItem[]; model: string }> {
-  const prompt = buildPrompt(body.items, body.to);
+  const items = body.items.slice(0, 30);
+  const list = items
+    .map(
+      (item) =>
+        `[${item.id}]\nTITLE: ${item.title}${
+          item.description ? `\nDESC: ${item.description}` : ""
+        }`,
+    )
+    .join("\n\n");
+
+  const prompt = `Translate each of the following news items. Return one object per item with the exact same "id" from the [brackets], a translated "title", and a translated "description" (omit if the input had no description).\n\n${list}`;
+
   const { text, model } = await callGemini({
     model: GEMINI_MODELS.fast,
     prompt,
+    systemInstruction:
+      body.to === "kh" ? KHMER_SYSTEM_INSTRUCTION : ENGLISH_SYSTEM_INSTRUCTION,
     responseMimeType: "application/json",
+    responseSchema: TRANSLATION_SCHEMA,
     maxOutputTokens: 8192,
   });
-  const parsed = extractJson(text);
-  if (!parsed || !Array.isArray(parsed.results)) {
+
+  // With responseSchema=ARRAY, the response is a JSON array directly.
+  let parsed: TranslatedItem[];
+  try {
+    const raw = JSON.parse(text);
+    parsed = Array.isArray(raw) ? raw : raw?.results ?? null;
+  } catch {
+    // Defensive fallback in case the model wrapped the array.
+    const extracted = extractJson(text);
+    parsed = extracted?.results ?? [];
+  }
+  if (!Array.isArray(parsed) || parsed.length === 0) {
     throw new Error("Failed to parse Gemini response");
   }
-  return { results: parsed.results, model };
+  return { results: parsed, model };
 }
 
 async function translateWithClaude(

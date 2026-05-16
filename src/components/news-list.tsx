@@ -242,7 +242,7 @@ export default function NewsList({ items: initialItems }: { items: NewsItem[] })
                   ? "bg-white/[0.06] text-foreground"
                   : "text-muted hover:text-foreground"
               }`}
-              title="Translate to Khmer with Claude Haiku 4.5"
+              title="Translate to Khmer with Gemini 2.5 Flash"
             >
               ខ្មែរ
             </button>

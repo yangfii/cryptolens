@@ -43,10 +43,23 @@ export function isGeminiConfigured(): boolean {
   return Boolean(process.env.GEMINI_API_KEY);
 }
 
+// JSON schema subset Gemini accepts in responseSchema.
+export type GeminiSchema =
+  | { type: "STRING" | "NUMBER" | "INTEGER" | "BOOLEAN"; description?: string }
+  | {
+      type: "OBJECT";
+      properties: Record<string, GeminiSchema>;
+      required?: string[];
+      description?: string;
+    }
+  | { type: "ARRAY"; items: GeminiSchema; description?: string };
+
 async function callGeminiSingle(opts: {
   model: string;
   prompt: string;
+  systemInstruction?: string;
   responseMimeType?: "application/json" | "text/plain";
+  responseSchema?: GeminiSchema;
   maxOutputTokens?: number;
 }): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -56,7 +69,7 @@ async function callGeminiSingle(opts: {
 
   const url = `${GEMINI_BASE_URL}/models/${opts.model}:generateContent`;
 
-  const body = {
+  const body: Record<string, unknown> = {
     contents: [{ role: "user", parts: [{ text: opts.prompt }] }],
     generationConfig: {
       temperature: 0.3,
@@ -64,8 +77,15 @@ async function callGeminiSingle(opts: {
       ...(opts.responseMimeType
         ? { responseMimeType: opts.responseMimeType }
         : {}),
+      ...(opts.responseSchema ? { responseSchema: opts.responseSchema } : {}),
     },
   };
+  if (opts.systemInstruction) {
+    body.systemInstruction = {
+      role: "system",
+      parts: [{ text: opts.systemInstruction }],
+    };
+  }
 
   const res = await fetch(url, {
     method: "POST",
@@ -109,7 +129,9 @@ async function callGeminiSingle(opts: {
 export async function callGemini(opts: {
   model?: string;
   prompt: string;
+  systemInstruction?: string;
   responseMimeType?: "application/json" | "text/plain";
+  responseSchema?: GeminiSchema;
   maxOutputTokens?: number;
 }): Promise<{ text: string; model: string }> {
   const candidates = opts.model
