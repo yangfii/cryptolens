@@ -94,6 +94,18 @@ export default function TrackRecordGate() {
   );
 }
 
+type VerifiedAccount = {
+  login: number;
+  server: string;
+  broker: string;
+  balance: number;
+  equity: number;
+  currency: string;
+  leverage: number;
+  name: string;
+  platform: string;
+};
+
 function ConnectModal({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const [selected, setSelected] = useState<BrokerId | null>(null);
@@ -101,6 +113,8 @@ function ConnectModal({ onClose }: { onClose: () => void }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [verifiedAccount, setVerifiedAccount] =
+    useState<VerifiedAccount | null>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -131,9 +145,14 @@ function ConnectModal({ onClose }: { onClose: () => void }) {
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || "Verification failed");
       setSuccess(true);
+      if (data.account) {
+        setVerifiedAccount(data.account as VerifiedAccount);
+      }
+      // For MT4/MT5 we let the user see the verified info before reloading
+      const refreshDelay = data.account ? 4500 : 700;
       setTimeout(() => {
         router.refresh();
-      }, 700);
+      }, refreshDelay);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Verification failed");
       setSubmitting(false);
@@ -176,15 +195,37 @@ function ConnectModal({ onClose }: { onClose: () => void }) {
 
         <div className="p-5">
           {success ? (
-            <div className="flex flex-col items-center text-center py-6">
+            <div className="flex flex-col items-center text-center py-4">
               <div
                 className="icon-tile mb-4"
                 style={{ width: 48, height: 48, color: "#10b981" }}
               >
                 <Check className="w-5 h-5" />
               </div>
-              <div className="font-bold mb-1">Connected!</div>
-              <div className="text-xs text-muted">Unlocking Track Record…</div>
+              <div className="font-bold mb-1">Verified ✓</div>
+              {verifiedAccount ? (
+                <>
+                  <div className="text-xs text-muted mb-4">
+                    Live connection confirmed with your broker.
+                  </div>
+                  <div className="w-full grid grid-cols-2 gap-2 text-left mb-3">
+                    <InfoRow label="Account" value={String(verifiedAccount.login)} />
+                    <InfoRow label="Platform" value={verifiedAccount.platform.toUpperCase()} />
+                    <InfoRow label="Server" value={verifiedAccount.server} />
+                    <InfoRow label="Broker" value={verifiedAccount.broker} />
+                    <InfoRow
+                      label="Balance"
+                      value={`${verifiedAccount.balance.toFixed(2)} ${verifiedAccount.currency}`}
+                    />
+                    <InfoRow label="Leverage" value={`1:${verifiedAccount.leverage}`} />
+                  </div>
+                  <div className="text-[10px] text-muted">
+                    Unlocking Track Record in a moment…
+                  </div>
+                </>
+              ) : (
+                <div className="text-xs text-muted">Unlocking Track Record…</div>
+              )}
             </div>
           ) : !cfg ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -299,7 +340,7 @@ function ConnectModal({ onClose }: { onClose: () => void }) {
                 {submitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Verifying…
+                    {cfg.category === "cfd" ? "Connecting to broker…" : "Verifying…"}
                   </>
                 ) : (
                   <>
@@ -308,10 +349,26 @@ function ConnectModal({ onClose }: { onClose: () => void }) {
                   </>
                 )}
               </button>
+              {submitting && cfg.category === "cfd" && (
+                <div className="text-[10px] text-muted text-center mt-1">
+                  This can take up to 45 seconds while we connect to your MT4/MT5 server…
+                </div>
+              )}
             </form>
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-2.5">
+      <div className="text-[9px] text-muted uppercase tracking-[0.15em] font-semibold mb-0.5">
+        {label}
+      </div>
+      <div className="text-xs font-mono font-semibold truncate">{value}</div>
     </div>
   );
 }

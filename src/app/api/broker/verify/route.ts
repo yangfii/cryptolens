@@ -1,11 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import crypto from "node:crypto";
-import { BROKERS, BROKER_COOKIE, type BrokerId } from "@/lib/brokers";
+import {
+  BROKERS,
+  BROKER_COOKIE,
+  MT_ACCOUNT_COOKIE,
+  type BrokerId,
+} from "@/lib/brokers";
+import {
+  provisionMtAccount,
+  waitForConnected,
+  getAccountInformation,
+  deleteAccount,
+  type MtAccountInfo,
+  type MtPlatform,
+} from "@/lib/metaapi";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
 
 const VERIFY_TIMEOUT_MS = 10_000;
+const MT_VERIFY_TIMEOUT_MS = 45_000;
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -98,7 +113,7 @@ async function verifyBybit(apiKey: string, secret: string) {
   }
 }
 
-function validateMtFields(creds: Record<string, string>) {
+function validateMtFields(creds: Record<string, string>): MtPlatform {
   const acct = creds.accountNumber?.trim() ?? "";
   if (!/^\d{4,12}$/.test(acct)) {
     throw new Error("Account number must be 4–12 digits");
@@ -108,6 +123,34 @@ function validateMtFields(creds: Record<string, string>) {
   }
   if ((creds.server?.trim().length ?? 0) < 3) {
     throw new Error("Server name looks invalid");
+  }
+  const p = creds.platform?.trim().toLowerCase();
+  if (p !== "mt4" && p !== "mt5") {
+    throw new Error("Platform must be 'mt4' or 'mt5'");
+  }
+  return p;
+}
+
+async function verifyMtLive(
+  brokerId: BrokerId,
+  creds: Record<string, string>,
+): Promise<{ accountId: string; info: MtAccountInfo }> {
+  const platform = validateMtFields(creds);
+  const provisioned = await provisionMtAccount({
+    platform,
+    login: creds.accountNumber.trim(),
+    password: creds.investorPassword,
+    server: creds.server.trim(),
+    name: `sastra-${brokerId}-${creds.accountNumber.trim()}`,
+  });
+  try {
+    await waitForConnected(provisioned.id, MT_VERIFY_TIMEOUT_MS);
+    const info = await getAccountInformation(provisioned.id);
+    return { accountId: provisioned.id, info };
+  } catch (err) {
+    // Failed to connect — clean up so we don't pay for an unused account.
+    deleteAccount(provisioned.id).catch(() => {});
+    throw err;
   }
 }
 
@@ -150,6 +193,9 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  let mtAccountId: string | null = null;
+  let mtInfo: MtAccountInfo | null = null;
+
   try {
     if (brokerId === "binance") {
       await withTimeout(
@@ -167,7 +213,9 @@ export async function POST(req: NextRequest) {
         VERIFY_TIMEOUT_MS,
       );
     } else if (brokerId === "exness" || brokerId === "cxm") {
-      validateMtFields(creds);
+      const result = await verifyMtLive(brokerId, creds);
+      mtAccountId = result.accountId;
+      mtInfo = result.info;
     } else if (brokerId === "ctrader") {
       validateCtraderFields(creds);
     }
@@ -185,11 +233,33 @@ export async function POST(req: NextRequest) {
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });
+  if (mtAccountId) {
+    cookieStore.set(MT_ACCOUNT_COOKIE, mtAccountId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  }
 
   return NextResponse.json({
     ok: true,
     broker: brokerId,
     name: cfg.name,
     liveVerified: cfg.liveVerify,
+    account: mtInfo
+      ? {
+          login: mtInfo.login,
+          server: mtInfo.server,
+          broker: mtInfo.broker,
+          balance: mtInfo.balance,
+          equity: mtInfo.equity,
+          currency: mtInfo.currency,
+          leverage: mtInfo.leverage,
+          name: mtInfo.name,
+          platform: mtInfo.platform,
+        }
+      : null,
   });
 }

@@ -93,6 +93,14 @@ export const BROKERS: Record<BrokerId, Broker> = {
     blurb: "MT4 / MT5 forex & CFD broker.",
     fields: [
       {
+        key: "platform",
+        label: "Platform",
+        type: "text",
+        required: true,
+        placeholder: "mt4 or mt5",
+        hint: "Whichever MetaTrader you use to log in",
+      },
+      {
         key: "accountNumber",
         label: "Account Number",
         type: "text",
@@ -112,9 +120,11 @@ export const BROKERS: Record<BrokerId, Broker> = {
         type: "text",
         required: true,
         placeholder: "e.g. Exness-MT5Real8",
+        hint: "Exact server name from your MT4/MT5 login screen",
       },
     ],
-    liveVerify: false,
+    liveVerify: true,
+    helpUrl: "https://www.exness.com/help/article/000004373/",
   },
   cxm: {
     id: "cxm",
@@ -123,6 +133,14 @@ export const BROKERS: Record<BrokerId, Broker> = {
     color: "#1a73e8",
     blurb: "MT4 / MT5 multi-asset broker.",
     fields: [
+      {
+        key: "platform",
+        label: "Platform",
+        type: "text",
+        required: true,
+        placeholder: "mt4 or mt5",
+        hint: "Whichever MetaTrader you use to log in",
+      },
       {
         key: "accountNumber",
         label: "Account Number",
@@ -142,9 +160,10 @@ export const BROKERS: Record<BrokerId, Broker> = {
         type: "text",
         required: true,
         placeholder: "e.g. CXMDirect-Live",
+        hint: "Exact server name from your MT4/MT5 login screen",
       },
     ],
-    liveVerify: false,
+    liveVerify: true,
   },
   ctrader: {
     id: "ctrader",
@@ -175,3 +194,4 @@ export const BROKERS: Record<BrokerId, Broker> = {
 export const BROKER_LIST: Broker[] = Object.values(BROKERS);
 
 export const BROKER_COOKIE = "tr_broker";
+export const MT_ACCOUNT_COOKIE = "tr_mt_account";
