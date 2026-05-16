@@ -9,8 +9,13 @@ import {
 import { getRecentSnapshotsWithPerformance } from "@/lib/picks-history";
 import { formatPercent } from "@/lib/format";
 import SnapshotCard from "./snapshot-card";
+import ConnectedBadge from "./connected-badge";
 
-export default async function PicksPerformance() {
+type Props = {
+  connectedBroker?: { name: string; color: string };
+};
+
+export default async function PicksPerformance({ connectedBroker }: Props = {}) {
   const { snapshots, overallStats } = await getRecentSnapshotsWithPerformance(5);
 
   if (snapshots.length === 0 || overallStats.totalPicks === 0) {
@@ -33,6 +38,12 @@ export default async function PicksPerformance() {
             Helps you evaluate whether AI recommendations are working over time.
           </p>
         </div>
+        {connectedBroker && (
+          <ConnectedBadge
+            brokerName={connectedBroker.name}
+            brokerColor={connectedBroker.color}
+          />
+        )}
       </div>
 
       {/* Overall stats */}

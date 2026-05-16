@@ -15,7 +15,7 @@ import FeaturedCoinCard from "@/components/featured-coin-card";
 import TickerTape from "@/components/ticker-tape";
 import HeroSection from "@/components/hero-section";
 import DailyPicksSection, { DailyPicksSkeleton } from "@/components/daily-picks-section";
-import PicksPerformance from "@/components/picks-performance";
+import TrackRecordSection from "@/components/track-record-section";
 import ScrollReveal from "@/components/scroll-reveal";
 import { formatCompact } from "@/lib/format";
 
@@ -177,10 +177,10 @@ export default function HomePage() {
         </Suspense>
       </ScrollReveal>
 
-      {/* AI TRACK RECORD — performance of past picks */}
+      {/* AI TRACK RECORD — performance of past picks (gated by broker connection) */}
       <ScrollReveal direction="up" threshold={0.05}>
         <Suspense fallback={null}>
-          <PicksPerformance />
+          <TrackRecordSection />
         </Suspense>
       </ScrollReveal>
 
