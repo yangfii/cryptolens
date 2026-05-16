@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { User } from "lucide-react";
+import { User, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function HeaderAuthSlot() {
@@ -30,19 +30,12 @@ export default async function HeaderAuthSlot() {
   }
 
   return (
-    <div className="flex items-center gap-2 ml-1">
-      <Link
-        href="/login"
-        className="px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors"
-      >
-        Sign in
-      </Link>
-      <Link
-        href="/signup"
-        className="btn-primary inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold"
-      >
-        Sign up
-      </Link>
-    </div>
+    <Link
+      href="/signup"
+      className="btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold ml-1"
+    >
+      <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
+      Get started
+    </Link>
   );
 }
