@@ -10,9 +10,10 @@ import AnimatedLogo from "./animated-logo";
 
 type Props = {
   authSlot?: ReactNode;
+  isAuthenticated?: boolean;
 };
 
-export default function Header({ authSlot }: Props = {}) {
+export default function Header({ authSlot, isAuthenticated = false }: Props = {}) {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
 
@@ -43,53 +44,61 @@ export default function Header({ authSlot }: Props = {}) {
 
         {/* Desktop nav (lg+) */}
         <nav className="hidden lg:flex items-center gap-1 text-sm">
-          <Link
-            href="/"
-            className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex"
-          >
-            {t("nav.markets")}
-          </Link>
-          <Link
-            href="/news"
-            className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex"
-          >
-            {t("nav.news")}
-          </Link>
-          <Link
-            href="/allocator"
-            className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex items-center gap-1.5"
-          >
-            <PieChart className="w-3.5 h-3.5" />
-            {t("nav.allocator")}
-          </Link>
-          <Link
-            href="/research"
-            className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex"
-          >
-            {t("nav.research")}
-          </Link>
+          {isAuthenticated && (
+            <>
+              <Link
+                href="/"
+                className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex"
+              >
+                {t("nav.markets")}
+              </Link>
+              <Link
+                href="/news"
+                className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex"
+              >
+                {t("nav.news")}
+              </Link>
+              <Link
+                href="/allocator"
+                className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex items-center gap-1.5"
+              >
+                <PieChart className="w-3.5 h-3.5" />
+                {t("nav.allocator")}
+              </Link>
+              <Link
+                href="/research"
+                className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex"
+              >
+                {t("nav.research")}
+              </Link>
+            </>
+          )}
           <ThemeToggle />
           <LangToggle />
           {authSlot}
-          <Link
-            href="/recommend"
-            className="btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm"
-          >
-            <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
-            {t("nav.recommend")}
-          </Link>
+          {isAuthenticated && (
+            <Link
+              href="/recommend"
+              className="btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm"
+            >
+              <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
+              {t("nav.recommend")}
+            </Link>
+          )}
         </nav>
 
         {/* Mobile actions (<lg) */}
         <div className="lg:hidden flex items-center gap-1.5">
-          <Link
-            href="/recommend"
-            onClick={close}
-            aria-label={t("nav.recommend")}
-            className="btn-primary inline-flex items-center justify-center w-10 h-10 rounded-lg"
-          >
-            <Sparkles className="w-4 h-4" strokeWidth={2.5} />
-          </Link>
+          {isAuthenticated && (
+            <Link
+              href="/recommend"
+              onClick={close}
+              aria-label={t("nav.recommend")}
+              className="btn-primary inline-flex items-center justify-center w-10 h-10 rounded-lg"
+            >
+              <Sparkles className="w-4 h-4" strokeWidth={2.5} />
+            </Link>
+          )}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -116,35 +125,39 @@ export default function Header({ authSlot }: Props = {}) {
             className="lg:hidden relative z-40 border-t border-white/[0.06] bg-background-elev/95 backdrop-blur"
           >
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 space-y-1">
-              <Link
-                href="/"
-                onClick={close}
-                className="block px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
-              >
-                {t("nav.markets")}
-              </Link>
-              <Link
-                href="/news"
-                onClick={close}
-                className="block px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
-              >
-                {t("nav.news")}
-              </Link>
-              <Link
-                href="/allocator"
-                onClick={close}
-                className="flex items-center gap-2 px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
-              >
-                <PieChart className="w-4 h-4" />
-                {t("nav.allocator")}
-              </Link>
-              <Link
-                href="/research"
-                onClick={close}
-                className="block px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
-              >
-                {t("nav.research")}
-              </Link>
+              {isAuthenticated && (
+                <>
+                  <Link
+                    href="/"
+                    onClick={close}
+                    className="block px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
+                  >
+                    {t("nav.markets")}
+                  </Link>
+                  <Link
+                    href="/news"
+                    onClick={close}
+                    className="block px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
+                  >
+                    {t("nav.news")}
+                  </Link>
+                  <Link
+                    href="/allocator"
+                    onClick={close}
+                    className="flex items-center gap-2 px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
+                  >
+                    <PieChart className="w-4 h-4" />
+                    {t("nav.allocator")}
+                  </Link>
+                  <Link
+                    href="/research"
+                    onClick={close}
+                    className="block px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
+                  >
+                    {t("nav.research")}
+                  </Link>
+                </>
+              )}
               {authSlot && (
                 <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center gap-2 flex-wrap">
                   {authSlot}

@@ -10,10 +10,12 @@ import {
   Newspaper,
 } from "lucide-react";
 import { getGlobalData, getTopCoins } from "@/lib/coingecko";
+import { createClient } from "@/lib/supabase/server";
 import CoinTable from "@/components/coin-table";
 import FeaturedCoinCard from "@/components/featured-coin-card";
 import TickerTape from "@/components/ticker-tape";
 import HeroSection from "@/components/hero-section";
+import MarketingLanding from "@/components/marketing-landing";
 import DailyPicksSection, { DailyPicksSkeleton } from "@/components/daily-picks-section";
 import TrackRecordSection from "@/components/track-record-section";
 import ScrollReveal from "@/components/scroll-reveal";
@@ -147,7 +149,22 @@ function TableSkeleton() {
   );
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  // If Supabase isn't configured, fall back to the dashboard view to keep
+  // the site usable. Otherwise show marketing landing to anonymous visitors.
+  if (
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return <MarketingLanding />;
+    }
+  }
+
   return (
     <>
       <Suspense fallback={null}>

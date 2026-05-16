@@ -1,13 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, LogIn } from "lucide-react";
 import { useLang } from "./lang-provider";
 import HeroAiPreview from "./hero-ai-preview";
 import AnimatedTitle from "./animated-title";
 
-export default function HeroSection() {
+type Props = {
+  // When "guest", CTAs point at signup/signin. Default ("auth") keeps the
+  // existing dashboard CTAs.
+  mode?: "auth" | "guest";
+};
+
+export default function HeroSection({ mode = "auth" }: Props = {}) {
   const { t } = useLang();
+  const guest = mode === "guest";
   return (
     <section className="relative overflow-hidden">
       <div className="aurora">
@@ -44,26 +51,29 @@ export default function HeroSection() {
 
             <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
               <Link
-                href="/allocator"
+                href={guest ? "/signup" : "/allocator"}
                 className="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl"
               >
                 <Sparkles className="w-4 h-4" />
-                {t("hero.cta_primary")}
+                {guest ? "Sign up free" : t("hero.cta_primary")}
                 <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
               </Link>
               <Link
-                href="#markets"
+                href={guest ? "/login" : "#markets"}
                 className="btn-secondary inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl"
               >
-                {t("hero.cta_secondary")}
+                {guest && <LogIn className="w-4 h-4" />}
+                {guest ? "Sign in" : t("hero.cta_secondary")}
               </Link>
             </div>
 
             <div className="mt-8 sm:mt-10 flex items-center gap-x-5 gap-y-2 text-xs text-muted flex-wrap">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                {t("hero.feature_no_signup")}
-              </div>
+              {!guest && (
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                  {t("hero.feature_no_signup")}
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <span
                   className="w-1.5 h-1.5 rounded-full"

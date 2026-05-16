@@ -1,6 +1,20 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
+// Pages anyone can visit without an account. Everything else redirects to
+// /login when the visitor has no session.
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/signup",
+  "/signup/check-email",
+  "/auth/callback",
+];
+
+function isPublicPath(pathname: string): boolean {
+  return PUBLIC_PATHS.includes(pathname);
+}
+
 export async function proxy(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -29,9 +43,22 @@ export async function proxy(request: NextRequest) {
     },
   });
 
-  // Refresh the session if it's expired. Result is unused; calling this
-  // triggers setAll() above if a refresh happened.
-  await supabase.auth.getUser();
+  // Refresh the session if expired. This also tells us if the user is
+  // logged in for the gate check below.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { pathname } = request.nextUrl;
+
+  // Gate every non-public page behind sign-in.
+  if (!user && !isPublicPath(pathname)) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
 
   return response;
 }
