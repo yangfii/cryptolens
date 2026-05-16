@@ -39,12 +39,12 @@ export default function TrackRecordGate() {
             <Lock className="w-6 h-6" />
           </div>
           <h3 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">
-            Connect a broker to view AI Track Record
+            Set up API keys (for exchanges) & broker login
           </h3>
           <p className="text-sm text-muted leading-relaxed mb-6">
-            Track Record is reserved for connected accounts. Link your broker
-            with an API key or read-only credentials — we use it only to verify
-            your account.
+            API keys for crypto exchanges, read-only login for brokers — used
+            only to verify your account before unlocking AI Track Record. We
+            never store secrets or place trades.
           </p>
 
           <button
@@ -53,7 +53,7 @@ export default function TrackRecordGate() {
             className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm"
           >
             <Shield className="w-4 h-4" />
-            Connect Broker
+            Set up connection
             <ChevronRight className="w-4 h-4" />
           </button>
 
