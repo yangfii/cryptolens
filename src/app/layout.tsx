@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Kantumruy_Pro } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
+import HeaderAuthSlot from "@/components/header-auth-slot";
 import Footer from "@/components/footer";
 import { LangProvider } from "@/components/lang-provider";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -74,7 +75,7 @@ export default function RootLayout({
             </div>
             <ScrollProgress />
             <div className="relative z-10 flex flex-col flex-1">
-              <Header />
+              <Header authSlot={<HeaderAuthSlot />} />
               <main className="flex-1">{children}</main>
               <Footer />
             </div>

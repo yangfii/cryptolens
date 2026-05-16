@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Sparkles, PieChart, Menu, X } from "lucide-react";
 import { useLang } from "./lang-provider";
@@ -8,7 +8,11 @@ import LangToggle from "./lang-toggle";
 import ThemeToggle from "./theme-toggle";
 import AnimatedLogo from "./animated-logo";
 
-export default function Header() {
+type Props = {
+  authSlot?: ReactNode;
+};
+
+export default function Header({ authSlot }: Props = {}) {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
 
@@ -66,6 +70,7 @@ export default function Header() {
           </Link>
           <ThemeToggle />
           <LangToggle />
+          {authSlot}
           <Link
             href="/recommend"
             className="btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm"
@@ -140,6 +145,11 @@ export default function Header() {
               >
                 {t("nav.research")}
               </Link>
+              {authSlot && (
+                <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center gap-2 flex-wrap">
+                  {authSlot}
+                </div>
+              )}
               <div className="pt-3 mt-3 border-t border-white/[0.06] flex items-center gap-2 flex-wrap">
                 <ThemeToggle />
                 <LangToggle />
