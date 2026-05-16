@@ -1,35 +1,19 @@
 "use client";
 
-import { Languages } from "lucide-react";
 import { useLang } from "./lang-provider";
 
 export default function LangToggle() {
   const { lang, setLang } = useLang();
+  const isEn = lang === "en";
   return (
-    <div className="flex items-center gap-0.5 bg-background-elev rounded-lg p-0.5 border border-white/[0.06] mr-1">
-      <Languages className="w-3 h-3 text-muted ml-1.5" />
-      <button
-        onClick={() => setLang("en")}
-        className={`px-2 py-1 rounded text-[11px] font-semibold transition-colors ${
-          lang === "en"
-            ? "bg-white/[0.06] text-foreground"
-            : "text-muted hover:text-foreground"
-        }`}
-        aria-label="English"
-      >
-        EN
-      </button>
-      <button
-        onClick={() => setLang("kh")}
-        className={`px-2 py-1 rounded text-[11px] font-semibold transition-colors ${
-          lang === "kh"
-            ? "bg-white/[0.06] text-foreground"
-            : "text-muted hover:text-foreground"
-        }`}
-        aria-label="ភាសាខ្មែរ"
-      >
-        ខ្មែរ
-      </button>
-    </div>
+    <button
+      type="button"
+      onClick={() => setLang(isEn ? "kh" : "en")}
+      aria-label={isEn ? "Switch to Khmer" : "Switch to English"}
+      title={isEn ? "ភាសាខ្មែរ" : "English"}
+      className="inline-flex items-center justify-center min-w-9 h-9 px-2.5 rounded-lg text-[11px] font-bold text-muted hover:text-foreground hover:bg-[var(--hover-bg)] border border-white/[0.06] bg-background-elev transition-colors tracking-wider"
+    >
+      {isEn ? "EN" : "ខ្មែរ"}
+    </button>
   );
 }

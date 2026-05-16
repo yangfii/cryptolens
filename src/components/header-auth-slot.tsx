@@ -30,7 +30,7 @@ export default async function HeaderAuthSlot() {
   }
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2 ml-1">
       <Link
         href="/login"
         className="px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors"
@@ -39,7 +39,7 @@ export default async function HeaderAuthSlot() {
       </Link>
       <Link
         href="/signup"
-        className="px-3 py-2 rounded-lg text-sm font-semibold text-foreground bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors"
+        className="btn-primary inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold"
       >
         Sign up
       </Link>

@@ -3,40 +3,36 @@
 import { Sun, Moon, Monitor } from "lucide-react";
 import { useTheme, type Theme } from "./theme-provider";
 
-const OPTIONS: Array<{
-  value: Theme;
-  icon: typeof Sun;
-  label: string;
-}> = [
-  { value: "light", icon: Sun, label: "Light" },
-  { value: "dark", icon: Moon, label: "Dark" },
-  { value: "system", icon: Monitor, label: "System" },
-];
+const NEXT: Record<Theme, Theme> = {
+  light: "dark",
+  dark: "system",
+  system: "light",
+};
+
+const ICON = {
+  light: Sun,
+  dark: Moon,
+  system: Monitor,
+} as const;
+
+const LABEL = {
+  light: "Light",
+  dark: "Dark",
+  system: "System",
+} as const;
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const Icon = ICON[theme];
   return (
-    <div className="inline-flex items-center gap-0.5 bg-background-elev rounded-lg p-0.5 border border-white/[0.06]">
-      {OPTIONS.map((opt) => {
-        const Icon = opt.icon;
-        const selected = theme === opt.value;
-        return (
-          <button
-            key={opt.value}
-            onClick={() => setTheme(opt.value)}
-            aria-label={opt.label}
-            aria-pressed={selected}
-            title={opt.label}
-            className={`p-1.5 rounded-md transition-colors ${
-              selected
-                ? "bg-white/[0.06] text-foreground"
-                : "text-muted hover:text-foreground"
-            }`}
-          >
-            <Icon className="w-3.5 h-3.5" />
-          </button>
-        );
-      })}
-    </div>
+    <button
+      type="button"
+      onClick={() => setTheme(NEXT[theme])}
+      aria-label={`Theme: ${LABEL[theme]} (click to cycle)`}
+      title={`Theme: ${LABEL[theme]}`}
+      className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] border border-white/[0.06] bg-background-elev transition-colors"
+    >
+      <Icon className="w-4 h-4" />
+    </button>
   );
 }
