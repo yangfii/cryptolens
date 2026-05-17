@@ -7,6 +7,7 @@ import { useLang } from "./lang-provider";
 import LangToggle from "./lang-toggle";
 import ThemeToggle from "./theme-toggle";
 import AnimatedLogo from "./animated-logo";
+import CommandPalette from "./command-palette";
 
 type Props = {
   authSlot?: ReactNode;
@@ -73,6 +74,7 @@ export default function Header({ authSlot, isAuthenticated = false }: Props = {}
               </Link>
             </>
           )}
+          {isAuthenticated && <CommandPalette />}
           <ThemeToggle />
           <LangToggle />
           {authSlot}

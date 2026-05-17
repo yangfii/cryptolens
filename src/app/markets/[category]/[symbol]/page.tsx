@@ -15,18 +15,20 @@ import {
 } from "@/lib/markets-catalog";
 import {
   getChart,
+  getCandles,
   getNewsForSymbol,
   type YahooNews,
 } from "@/lib/yahoo-finance";
 import {
   getCoinDetail,
-  getCoinChart,
+  getCoinOhlc,
 } from "@/lib/coingecko";
 import { getCryptoNews } from "@/lib/news";
 import { analyzeAsset, type HeadlineInput } from "@/lib/asset-sentiment";
 import { formatPrice } from "@/lib/format";
 import type { NewsItem } from "@/types/crypto";
-import MiniChart from "@/components/mini-chart";
+import AssetTradingChart from "@/components/asset-trading-chart";
+import type { Candle } from "@/components/trading-chart";
 import SentimentPanel from "@/components/sentiment-panel";
 import AssetStatsGrid, {
   type StatItem,
@@ -57,6 +59,8 @@ type PerformanceBucket = { label: string; value: number | null };
 type AssetView = {
   category: MarketCategory;
   categoryLabel: string;
+  /** URL slug used by the candles API (e.g. "bitcoin", "aapl"). */
+  slug: string;
   display: string;
   symbol: string;
   shortName: string | null;
@@ -67,7 +71,7 @@ type AssetView = {
   low52w: number | null;
   dayHigh: number | null;
   dayLow: number | null;
-  closes: Array<number | null>;
+  candles: Candle[];
   stats: StatItem[];
   performance: PerformanceBucket[];
   headlines: HeadlineInput[];
@@ -136,20 +140,20 @@ export default async function AssetDetailPage({
         <div className="space-y-5">
           {/* Chart */}
           <div className="premium-card rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-[10px] text-muted uppercase tracking-[0.15em] font-semibold">
-                Price · last 30 days
+            <AssetTradingChart
+              category={view.category}
+              symbol={view.slug}
+              initialCandles={view.candles}
+              initialRange="1mo"
+            />
+            {(view.high52w || view.low52w) && (
+              <div className="text-[10px] text-muted text-right mt-2">
+                52w range:{" "}
+                <span className="font-mono text-foreground">
+                  {view.low52w != null ? formatPrice(view.low52w) : "—"} – {view.high52w != null ? formatPrice(view.high52w) : "—"}
+                </span>
               </div>
-              {(view.high52w || view.low52w) && (
-                <div className="text-[10px] text-muted">
-                  52w range:{" "}
-                  <span className="font-mono text-foreground">
-                    {view.low52w != null ? formatPrice(view.low52w) : "—"} – {view.high52w != null ? formatPrice(view.high52w) : "—"}
-                  </span>
-                </div>
-              )}
-            </div>
-            <MiniChart closes={view.closes} positive={up} height={260} />
+            )}
           </div>
 
           {/* Performance breakdown */}
@@ -256,9 +260,10 @@ async function loadAsset(
   const asset = findAsset(category, slug);
   if (!asset?.yahooSymbol) return null;
 
-  const [chart, longChart, news] = await Promise.all([
+  const [chart, longChart, candles, news] = await Promise.all([
     getChart(asset.yahooSymbol, "1mo"),
     getChart(asset.yahooSymbol, "1y"),
+    getCandles(asset.yahooSymbol, "1mo").catch(() => [] as Candle[]),
     getNewsForSymbol(asset.yahooSymbol, 8).catch(() => [] as YahooNews[]),
   ]);
   if (!chart) return null;
@@ -294,6 +299,7 @@ async function loadAsset(
   return {
     category,
     categoryLabel: getCategory(category)!.label,
+    slug: asset.slug,
     display: asset.display,
     symbol: chart.symbol,
     shortName: asset.shortName ?? chart.shortName ?? null,
@@ -304,7 +310,7 @@ async function loadAsset(
     low52w: chart.fiftyTwoWeekLow,
     dayHigh: chart.dayHigh,
     dayLow: chart.dayLow,
-    closes: chart.closes,
+    candles,
     stats,
     performance,
     headlines: news.map((n) => ({
@@ -327,15 +333,22 @@ async function loadAsset(
 
 async function loadCrypto(coinId: string): Promise<AssetView | null> {
   try {
-    const [detail, chart, news] = await Promise.all([
+    const [detail, ohlc, news] = await Promise.all([
       getCoinDetail(coinId),
-      getCoinChart(coinId, 30).catch(() => null),
+      getCoinOhlc(coinId, 30).catch(() => [] as Array<[number, number, number, number, number]>),
       getCryptoNews(20, [coinId.toUpperCase()]).catch(() => [] as NewsItem[]),
     ]);
     const md = detail.market_data;
     const price = md.current_price.usd;
     const changePercent = md.price_change_percentage_24h;
-    const closes = (chart?.prices ?? []).map((p) => p[1]);
+    const candles: Candle[] = ohlc.map(([t, o, h, l, c]) => ({
+      time: Math.floor(t / 1000),
+      open: o,
+      high: h,
+      low: l,
+      close: c,
+      volume: 0,
+    }));
 
     const performance: PerformanceBucket[] = [
       { label: "24h", value: changePercent ?? null },
@@ -357,6 +370,7 @@ async function loadCrypto(coinId: string): Promise<AssetView | null> {
     return {
       category: "crypto",
       categoryLabel: "Crypto",
+      slug: coinId,
       display: detail.symbol.toUpperCase(),
       symbol: detail.symbol.toUpperCase(),
       shortName: detail.name,
@@ -367,7 +381,7 @@ async function loadCrypto(coinId: string): Promise<AssetView | null> {
       low52w: md.atl.usd ?? null,
       dayHigh: md.high_24h.usd ?? null,
       dayLow: md.low_24h.usd ?? null,
-      closes,
+      candles,
       stats,
       performance,
       headlines: news.slice(0, 8).map((n) => ({

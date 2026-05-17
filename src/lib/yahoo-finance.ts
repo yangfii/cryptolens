@@ -136,11 +136,78 @@ type ChartResponse = {
     result?: Array<{
       meta: ExtendedMeta;
       timestamp?: number[];
-      indicators?: { quote?: Array<{ close?: Array<number | null> }> };
+      indicators?: {
+        quote?: Array<{
+          open?: Array<number | null>;
+          high?: Array<number | null>;
+          low?: Array<number | null>;
+          close?: Array<number | null>;
+          volume?: Array<number | null>;
+        }>;
+      };
     }>;
     error?: { code: string; description: string } | null;
   };
 };
+
+export type Candle = {
+  time: number; // unix seconds
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+};
+
+export async function getCandles(
+  symbol: string,
+  range: ChartRange = "1mo",
+): Promise<Candle[]> {
+  const interval =
+    range === "1d"
+      ? "5m"
+      : range === "5d"
+      ? "15m"
+      : range === "1mo"
+      ? "1h"
+      : range === "3mo" || range === "6mo"
+      ? "1d"
+      : "1d";
+  const url = `${CHART_URL}/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}`;
+  const res = await fetch(url, {
+    headers: COMMON_HEADERS,
+    next: { revalidate: 120 },
+  });
+  if (!res.ok) return [];
+  const data = (await res.json()) as ChartResponse;
+  const result = data.chart?.result?.[0];
+  if (!result?.timestamp || !result.indicators?.quote?.[0]) return [];
+  const q = result.indicators.quote[0];
+  const out: Candle[] = [];
+  for (let i = 0; i < result.timestamp.length; i++) {
+    const o = q.open?.[i];
+    const h = q.high?.[i];
+    const l = q.low?.[i];
+    const c = q.close?.[i];
+    const v = q.volume?.[i];
+    if (
+      typeof o === "number" &&
+      typeof h === "number" &&
+      typeof l === "number" &&
+      typeof c === "number"
+    ) {
+      out.push({
+        time: result.timestamp[i],
+        open: o,
+        high: h,
+        low: l,
+        close: c,
+        volume: typeof v === "number" ? v : 0,
+      });
+    }
+  }
+  return out;
+}
 
 export type ChartRange = "1d" | "5d" | "1mo" | "3mo" | "6mo" | "1y" | "5y";
 

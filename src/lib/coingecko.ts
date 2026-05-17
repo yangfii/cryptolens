@@ -73,6 +73,23 @@ export async function searchCoins(query: string): Promise<
 
 export type CoinChartPoint = [number, number]; // [timestamp_ms, price_usd]
 
+export type CoinOhlcPoint = [number, number, number, number, number]; // [t_ms, o, h, l, c]
+
+export async function getCoinOhlc(
+  id: string,
+  days = 30,
+  vsCurrency = "usd",
+): Promise<CoinOhlcPoint[]> {
+  const params = new URLSearchParams({
+    vs_currency: vsCurrency,
+    days: String(days),
+  });
+  return cgFetch<CoinOhlcPoint[]>(`/coins/${id}/ohlc?${params}`, {
+    revalidate: 300,
+    tags: [`coin:${id}:ohlc:${days}`],
+  });
+}
+
 export async function getCoinChart(
   id: string,
   days = 30,
