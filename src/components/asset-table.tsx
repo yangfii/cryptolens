@@ -2,8 +2,13 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { TrendingUp, TrendingDown, Search, ArrowUp, ArrowDown } from "lucide-react";
+import { TrendingUp, TrendingDown, Search, ArrowUp, ArrowDown, ArrowRight } from "lucide-react";
 import { formatPrice, formatCompact } from "@/lib/format";
+import {
+  ASSETS_BY_CATEGORY,
+  CATEGORIES,
+  type MarketCategory,
+} from "@/lib/markets-catalog";
 import InlineSparkline from "./inline-sparkline";
 
 export type AssetRow = {
@@ -25,9 +30,17 @@ type SortDir = "asc" | "desc";
 
 type Props = {
   rows: AssetRow[];
+  currentCategory: MarketCategory;
 };
 
-export default function AssetTable({ rows }: Props) {
+type CrossHit = {
+  category: MarketCategory;
+  display: string;
+  shortName: string;
+  href: string;
+};
+
+export default function AssetTable({ rows, currentCategory }: Props) {
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -58,6 +71,36 @@ export default function AssetTable({ rows }: Props) {
     }
     return result;
   }, [rows, query, sortKey, sortDir]);
+
+  // Cross-category matches — only computed when current category has 0 hits
+  // and there's a real query. Searches the static Yahoo catalogs (crypto
+  // can be reached via ⌘K).
+  const crossHits = useMemo<CrossHit[]>(() => {
+    const q = query.trim().toLowerCase();
+    if (!q || filtered.length > 0) return [];
+    const out: CrossHit[] = [];
+    for (const catId of Object.keys(ASSETS_BY_CATEGORY) as Array<
+      Exclude<MarketCategory, "crypto">
+    >) {
+      if (catId === currentCategory) continue;
+      for (const e of ASSETS_BY_CATEGORY[catId]) {
+        if (
+          e.display.toLowerCase().includes(q) ||
+          e.shortName.toLowerCase().includes(q) ||
+          (e.yahooSymbol ?? "").toLowerCase().includes(q) ||
+          e.slug.toLowerCase().includes(q)
+        ) {
+          out.push({
+            category: catId,
+            display: e.display,
+            shortName: e.shortName,
+            href: `/markets/${catId}/${e.slug}`,
+          });
+        }
+      }
+    }
+    return out.slice(0, 6);
+  }, [query, filtered.length, currentCategory]);
 
   function toggleSort(key: SortKey) {
     if (sortKey === key) {
@@ -231,8 +274,57 @@ export default function AssetTable({ rows }: Props) {
               })}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-muted text-sm">
-                    No assets match "{query}"
+                  <td colSpan={6} className="px-4 py-10">
+                    <div className="max-w-md mx-auto text-center">
+                      <div className="text-sm text-muted mb-1">
+                        No assets in {CATEGORIES.find((c) => c.id === currentCategory)?.label} match
+                        <span className="text-foreground font-semibold"> &ldquo;{query}&rdquo;</span>
+                      </div>
+                      {crossHits.length > 0 ? (
+                        <>
+                          <div className="text-[11px] text-muted mt-3 mb-2 uppercase tracking-wider font-semibold">
+                            Found in other categories
+                          </div>
+                          <div className="flex flex-col gap-1.5 items-stretch">
+                            {crossHits.map((h) => {
+                              const cat = CATEGORIES.find(
+                                (c) => c.id === h.category,
+                              );
+                              return (
+                                <Link
+                                  key={h.href}
+                                  href={h.href}
+                                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] transition-colors group"
+                                >
+                                  <span
+                                    className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0"
+                                    style={{
+                                      background: `${cat?.iconColor}15`,
+                                      color: cat?.iconColor,
+                                    }}
+                                  >
+                                    {cat?.label}
+                                  </span>
+                                  <span className="text-sm font-bold">{h.display}</span>
+                                  <span className="text-[11px] text-muted truncate flex-1 text-left">
+                                    {h.shortName}
+                                  </span>
+                                  <ArrowRight className="w-3.5 h-3.5 text-muted group-hover:text-accent transition-colors" />
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-[11px] text-muted mt-2">
+                          Try{" "}
+                          <kbd className="font-mono px-1 py-0 rounded bg-white/[0.06] border border-white/[0.08] text-foreground">
+                            ⌘K
+                          </kbd>{" "}
+                          to search across crypto and all markets.
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               )}

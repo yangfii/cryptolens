@@ -118,6 +118,9 @@ export const FOREX: AssetEntry[] = [
   { slug: "usdmxn", yahooSymbol: "MXN=X", display: "USD/MXN", shortName: "US Dollar / Mexican Peso" },
   { slug: "usdinr", yahooSymbol: "INR=X", display: "USD/INR", shortName: "US Dollar / Indian Rupee" },
   { slug: "usdthb", yahooSymbol: "THB=X", display: "USD/THB", shortName: "US Dollar / Thai Baht" },
+  // Spot gold/silver quotes — also tradable as forex-style pairs at most brokers
+  { slug: "xauusd", yahooSymbol: "XAUUSD=X", display: "XAU/USD", shortName: "Gold spot / US Dollar" },
+  { slug: "xagusd", yahooSymbol: "XAGUSD=X", display: "XAG/USD", shortName: "Silver spot / US Dollar" },
 ];
 
 export const COMMODITIES: AssetEntry[] = [

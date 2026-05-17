@@ -56,7 +56,7 @@ export default async function MarketsCategoryPage({
         <MarketsCategoryTabs active={cat.id} />
       </div>
 
-      <AssetTable rows={rows} />
+      <AssetTable rows={rows} currentCategory={cat.id} />
 
       <p className="text-[11px] text-muted text-center mt-6">
         Prices update every minute · Click any asset for live chart, AI
