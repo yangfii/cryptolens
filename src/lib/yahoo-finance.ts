@@ -27,6 +27,8 @@ export type YahooQuote = {
   fiftyTwoWeekLow: number | null;
   volume: number | null;
   exchange: string | null;
+  /** Recent close prices for an inline sparkline. */
+  sparkline: number[];
 };
 
 type SparkResultMeta = {
@@ -67,7 +69,7 @@ export async function getQuotes(symbols: string[]): Promise<YahooQuote[]> {
   if (symbols.length === 0) return [];
   const url = `${SPARK_URL}?symbols=${encodeURIComponent(
     symbols.join(","),
-  )}&range=1d&interval=5m`;
+  )}&range=5d&interval=1h`;
   const res = await fetch(url, {
     headers: COMMON_HEADERS,
     next: { revalidate: 60 },
@@ -78,11 +80,13 @@ export async function getQuotes(symbols: string[]): Promise<YahooQuote[]> {
 
   const quotes: YahooQuote[] = [];
   for (const r of results) {
-    const meta = r.response?.[0]?.meta;
+    const resp = r.response?.[0];
+    const meta = resp?.meta;
     if (!meta?.regularMarketPrice) continue;
     const prev = meta.previousClose ?? meta.chartPreviousClose ?? meta.regularMarketPrice;
     const changePercent =
       prev > 0 ? ((meta.regularMarketPrice - prev) / prev) * 100 : 0;
+    const closes = resp?.indicators?.quote?.[0]?.close ?? [];
     quotes.push({
       symbol: meta.symbol,
       shortName: meta.shortName ?? null,
@@ -96,6 +100,7 @@ export async function getQuotes(symbols: string[]): Promise<YahooQuote[]> {
       fiftyTwoWeekLow: meta.fiftyTwoWeekLow ?? null,
       volume: meta.regularMarketVolume ?? null,
       exchange: meta.exchangeName ?? null,
+      sparkline: closes.filter((c): c is number => typeof c === "number"),
     });
   }
   return quotes;

@@ -69,11 +69,26 @@ export const STOCKS: AssetEntry[] = [
   { slug: "amzn", yahooSymbol: "AMZN", display: "AMZN", shortName: "Amazon" },
   { slug: "meta", yahooSymbol: "META", display: "META", shortName: "Meta Platforms" },
   { slug: "tsla", yahooSymbol: "TSLA", display: "TSLA", shortName: "Tesla" },
+  { slug: "amd", yahooSymbol: "AMD", display: "AMD", shortName: "Advanced Micro Devices" },
+  { slug: "nflx", yahooSymbol: "NFLX", display: "NFLX", shortName: "Netflix" },
+  { slug: "crm", yahooSymbol: "CRM", display: "CRM", shortName: "Salesforce" },
+  { slug: "adbe", yahooSymbol: "ADBE", display: "ADBE", shortName: "Adobe" },
+  { slug: "orcl", yahooSymbol: "ORCL", display: "ORCL", shortName: "Oracle" },
+  { slug: "intc", yahooSymbol: "INTC", display: "INTC", shortName: "Intel" },
+  { slug: "uber", yahooSymbol: "UBER", display: "UBER", shortName: "Uber Technologies" },
+  { slug: "shop", yahooSymbol: "SHOP", display: "SHOP", shortName: "Shopify" },
   { slug: "brk-b", yahooSymbol: "BRK-B", display: "BRK.B", shortName: "Berkshire Hathaway" },
   { slug: "jpm", yahooSymbol: "JPM", display: "JPM", shortName: "JPMorgan Chase" },
+  { slug: "bac", yahooSymbol: "BAC", display: "BAC", shortName: "Bank of America" },
   { slug: "v", yahooSymbol: "V", display: "V", shortName: "Visa" },
   { slug: "ma", yahooSymbol: "MA", display: "MA", shortName: "Mastercard" },
   { slug: "wmt", yahooSymbol: "WMT", display: "WMT", shortName: "Walmart" },
+  { slug: "cost", yahooSymbol: "COST", display: "COST", shortName: "Costco" },
+  { slug: "ko", yahooSymbol: "KO", display: "KO", shortName: "Coca-Cola" },
+  { slug: "pep", yahooSymbol: "PEP", display: "PEP", shortName: "PepsiCo" },
+  { slug: "mcd", yahooSymbol: "MCD", display: "MCD", shortName: "McDonald's" },
+  { slug: "nke", yahooSymbol: "NKE", display: "NKE", shortName: "Nike" },
+  { slug: "dis", yahooSymbol: "DIS", display: "DIS", shortName: "Walt Disney" },
 ];
 
 export const METALS: AssetEntry[] = [
@@ -94,6 +109,15 @@ export const FOREX: AssetEntry[] = [
   { slug: "nzdusd", yahooSymbol: "NZDUSD=X", display: "NZD/USD", shortName: "New Zealand Dollar / US Dollar" },
   { slug: "eurjpy", yahooSymbol: "EURJPY=X", display: "EUR/JPY", shortName: "Euro / Japanese Yen" },
   { slug: "gbpjpy", yahooSymbol: "GBPJPY=X", display: "GBP/JPY", shortName: "British Pound / Japanese Yen" },
+  { slug: "eurgbp", yahooSymbol: "EURGBP=X", display: "EUR/GBP", shortName: "Euro / British Pound" },
+  { slug: "eurchf", yahooSymbol: "EURCHF=X", display: "EUR/CHF", shortName: "Euro / Swiss Franc" },
+  { slug: "audjpy", yahooSymbol: "AUDJPY=X", display: "AUD/JPY", shortName: "Australian Dollar / Japanese Yen" },
+  { slug: "usdsgd", yahooSymbol: "SGD=X", display: "USD/SGD", shortName: "US Dollar / Singapore Dollar" },
+  { slug: "usdhkd", yahooSymbol: "HKD=X", display: "USD/HKD", shortName: "US Dollar / Hong Kong Dollar" },
+  { slug: "usdcnh", yahooSymbol: "CNH=X", display: "USD/CNH", shortName: "US Dollar / Chinese Yuan Offshore" },
+  { slug: "usdmxn", yahooSymbol: "MXN=X", display: "USD/MXN", shortName: "US Dollar / Mexican Peso" },
+  { slug: "usdinr", yahooSymbol: "INR=X", display: "USD/INR", shortName: "US Dollar / Indian Rupee" },
+  { slug: "usdthb", yahooSymbol: "THB=X", display: "USD/THB", shortName: "US Dollar / Thai Baht" },
 ];
 
 export const COMMODITIES: AssetEntry[] = [

@@ -68,7 +68,7 @@ export default async function MarketsCategoryPage({
 
 async function loadRows(category: MarketCategory): Promise<AssetRow[]> {
   if (category === "crypto") {
-    const coins = await getTopCoins(1, 30);
+    const coins = await getTopCoins(1, 50);
     return coins.map((c) => ({
       href: `/markets/crypto/${c.id}`,
       symbol: c.symbol.toUpperCase(),
@@ -77,6 +77,8 @@ async function loadRows(category: MarketCategory): Promise<AssetRow[]> {
       price: c.current_price,
       changePercent: c.price_change_percentage_24h ?? 0,
       currency: "USD",
+      volume: c.total_volume,
+      sparkline: c.sparkline_in_7d?.price ?? [],
     }));
   }
 
@@ -97,6 +99,10 @@ async function loadRows(category: MarketCategory): Promise<AssetRow[]> {
       price: q.price,
       changePercent: q.changePercent,
       currency: q.currency,
+      dayHigh: q.dayHigh,
+      dayLow: q.dayLow,
+      volume: q.volume,
+      sparkline: q.sparkline,
     });
   }
   return out;
