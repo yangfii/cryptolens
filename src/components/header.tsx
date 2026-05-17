@@ -47,7 +47,7 @@ export default function Header({ authSlot, isAuthenticated = false }: Props = {}
           {isAuthenticated && (
             <>
               <Link
-                href="/"
+                href="/markets"
                 className="px-3 py-2 rounded-lg text-muted hover:text-foreground hover:bg-[var(--hover-bg)] transition-colors font-medium inline-flex"
               >
                 {t("nav.markets")}
@@ -128,7 +128,7 @@ export default function Header({ authSlot, isAuthenticated = false }: Props = {}
               {isAuthenticated && (
                 <>
                   <Link
-                    href="/"
+                    href="/markets"
                     onClick={close}
                     className="block px-3 py-3 rounded-lg text-sm font-semibold hover:bg-[var(--hover-bg)] transition-colors"
                   >
