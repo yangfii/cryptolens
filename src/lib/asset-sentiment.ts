@@ -99,19 +99,35 @@ function extractJson(text: string): AssetSentiment | null {
 export async function analyzeAsset(
   input: AnalyzeInput,
 ): Promise<AssetSentiment | null> {
-  const client = getAnthropic();
-  const result = await client.messages.create({
-    model: MODELS.fast,
-    max_tokens: 1024,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: "user", content: buildPrompt(input) }],
-  });
+  // Cap headlines so the prompt + response fit comfortably and the call
+  // doesn't drag on for slow news-heavy assets.
+  const capped: AnalyzeInput = {
+    ...input,
+    headlines: input.headlines.slice(0, 6),
+  };
 
-  const textBlock = result.content.find((c) => c.type === "text");
-  if (!textBlock || textBlock.type !== "text") return null;
-  const parsed = extractJson(textBlock.text);
-  if (!parsed) return null;
-  // Clamp confidence to [0, 100]
-  parsed.confidence = Math.max(0, Math.min(100, Math.round(parsed.confidence)));
-  return parsed;
+  const client = getAnthropic();
+  try {
+    const result = await client.messages.create({
+      model: MODELS.fast,
+      max_tokens: 1500,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: "user", content: buildPrompt(capped) }],
+    });
+
+    const textBlock = result.content.find((c) => c.type === "text");
+    if (!textBlock || textBlock.type !== "text") return null;
+    const parsed = extractJson(textBlock.text);
+    if (!parsed) return null;
+    parsed.confidence = Math.max(
+      0,
+      Math.min(100, Math.round(parsed.confidence ?? 50)),
+    );
+    parsed.drivers = Array.isArray(parsed.drivers) ? parsed.drivers : [];
+    parsed.headlines = Array.isArray(parsed.headlines) ? parsed.headlines : [];
+    return parsed;
+  } catch (err) {
+    console.error("[asset-sentiment] analyzeAsset failed:", err);
+    return null;
+  }
 }

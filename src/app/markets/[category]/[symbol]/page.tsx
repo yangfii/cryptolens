@@ -13,14 +13,28 @@ import {
   getCategory,
   type MarketCategory,
 } from "@/lib/markets-catalog";
-import { getChart, getNewsForSymbol, type YahooNews } from "@/lib/yahoo-finance";
-import { getCoinDetail } from "@/lib/coingecko";
+import {
+  getChart,
+  getNewsForSymbol,
+  type YahooNews,
+} from "@/lib/yahoo-finance";
+import {
+  getCoinDetail,
+  getCoinChart,
+} from "@/lib/coingecko";
 import { getCryptoNews } from "@/lib/news";
 import { analyzeAsset, type HeadlineInput } from "@/lib/asset-sentiment";
 import { formatPrice } from "@/lib/format";
 import type { NewsItem } from "@/types/crypto";
 import MiniChart from "@/components/mini-chart";
 import SentimentPanel from "@/components/sentiment-panel";
+import AssetStatsGrid, {
+  type StatItem,
+  compactStat,
+  moneyStat,
+  percentStat,
+} from "@/components/asset-stats-grid";
+import PerformanceRow from "@/components/performance-row";
 
 export const revalidate = 60;
 export const dynamic = "force-dynamic";
@@ -38,6 +52,8 @@ export async function generateMetadata({
   };
 }
 
+type PerformanceBucket = { label: string; value: number | null };
+
 type AssetView = {
   category: MarketCategory;
   categoryLabel: string;
@@ -49,9 +65,12 @@ type AssetView = {
   changePercent24h: number;
   high52w: number | null;
   low52w: number | null;
+  dayHigh: number | null;
+  dayLow: number | null;
   closes: Array<number | null>;
+  stats: StatItem[];
+  performance: PerformanceBucket[];
   headlines: HeadlineInput[];
-  /** url, publisher, when for the headline ids in `headlines` */
   headlineLinks: Record<string, { url: string; publisher?: string; when?: string }>;
 };
 
@@ -108,6 +127,11 @@ export default async function AssetDetailPage({
         </div>
       </header>
 
+      {/* Stats grid */}
+      <div className="mb-5">
+        <AssetStatsGrid items={view.stats} />
+      </div>
+
       <div className="grid lg:grid-cols-[1.4fr_1fr] gap-5">
         <div className="space-y-5">
           {/* Chart */}
@@ -120,13 +144,16 @@ export default async function AssetDetailPage({
                 <div className="text-[10px] text-muted">
                   52w range:{" "}
                   <span className="font-mono text-foreground">
-                    {view.low52w?.toFixed(2)} – {view.high52w?.toFixed(2)}
+                    {view.low52w != null ? formatPrice(view.low52w) : "—"} – {view.high52w != null ? formatPrice(view.high52w) : "—"}
                   </span>
                 </div>
               )}
             </div>
-            <MiniChart closes={view.closes} positive={up} height={240} />
+            <MiniChart closes={view.closes} positive={up} height={260} />
           </div>
+
+          {/* Performance breakdown */}
+          <PerformanceRow buckets={view.performance} />
 
           {/* Sentiment */}
           <Suspense
@@ -204,7 +231,7 @@ async function SentimentSection({ view }: { view: AssetView }) {
     high52w: view.high52w,
     low52w: view.low52w,
     headlines: view.headlines,
-  }).catch(() => null);
+  });
 
   if (!sentiment) {
     return (
@@ -229,11 +256,40 @@ async function loadAsset(
   const asset = findAsset(category, slug);
   if (!asset?.yahooSymbol) return null;
 
-  const [chart, news] = await Promise.all([
+  const [chart, longChart, news] = await Promise.all([
     getChart(asset.yahooSymbol, "1mo"),
+    getChart(asset.yahooSymbol, "1y"),
     getNewsForSymbol(asset.yahooSymbol, 8).catch(() => [] as YahooNews[]),
   ]);
   if (!chart) return null;
+
+  const performance = computePerformanceFromCloses(
+    longChart?.closes ?? [],
+    chart.price,
+  );
+  // Slot the 24h figure in
+  performance[0].value = chart.changePercent;
+
+  const stats: StatItem[] = [
+    moneyStat("Price", chart.price, chart.currency),
+    {
+      label: "24h Range",
+      value:
+        chart.dayLow != null && chart.dayHigh != null
+          ? `${formatPrice(chart.dayLow)} – ${formatPrice(chart.dayHigh)}`
+          : "—",
+    },
+    {
+      label: "52w Range",
+      value:
+        chart.fiftyTwoWeekLow != null && chart.fiftyTwoWeekHigh != null
+          ? `${formatPrice(chart.fiftyTwoWeekLow)} – ${formatPrice(chart.fiftyTwoWeekHigh)}`
+          : "—",
+    },
+    compactStat("Volume", chart.volume),
+    { label: "Exchange", value: chart.exchange ?? "—" },
+    { label: "Currency", value: chart.currency },
+  ];
 
   return {
     category,
@@ -244,9 +300,13 @@ async function loadAsset(
     price: chart.price,
     currency: chart.currency,
     changePercent24h: chart.changePercent,
-    high52w: null,
-    low52w: null,
+    high52w: chart.fiftyTwoWeekHigh,
+    low52w: chart.fiftyTwoWeekLow,
+    dayHigh: chart.dayHigh,
+    dayLow: chart.dayLow,
     closes: chart.closes,
+    stats,
+    performance,
     headlines: news.map((n) => ({
       id: n.uuid,
       title: n.title,
@@ -267,12 +327,33 @@ async function loadAsset(
 
 async function loadCrypto(coinId: string): Promise<AssetView | null> {
   try {
-    const [detail, news] = await Promise.all([
+    const [detail, chart, news] = await Promise.all([
       getCoinDetail(coinId),
+      getCoinChart(coinId, 30).catch(() => null),
       getCryptoNews(20, [coinId.toUpperCase()]).catch(() => [] as NewsItem[]),
     ]);
-    const price = detail.market_data.current_price.usd;
-    const changePercent = detail.market_data.price_change_percentage_24h;
+    const md = detail.market_data;
+    const price = md.current_price.usd;
+    const changePercent = md.price_change_percentage_24h;
+    const closes = (chart?.prices ?? []).map((p) => p[1]);
+
+    const performance: PerformanceBucket[] = [
+      { label: "24h", value: changePercent ?? null },
+      { label: "7d", value: md.price_change_percentage_7d ?? null },
+      { label: "30d", value: md.price_change_percentage_30d ?? null },
+      { label: "90d", value: null }, // not in CG basic
+      { label: "1y", value: null },
+    ];
+
+    const stats: StatItem[] = [
+      moneyStat("Market Cap", md.market_cap.usd),
+      compactStat("24h Volume", md.total_volume.usd, "$"),
+      compactStat("Circulating", md.circulating_supply),
+      compactStat("Max Supply", md.max_supply),
+      moneyStat("ATH", md.ath.usd),
+      moneyStat("ATL", md.atl.usd),
+    ];
+
     return {
       category: "crypto",
       categoryLabel: "Crypto",
@@ -282,9 +363,13 @@ async function loadCrypto(coinId: string): Promise<AssetView | null> {
       price,
       currency: "USD",
       changePercent24h: changePercent,
-      high52w: detail.market_data.ath.usd ?? null,
-      low52w: detail.market_data.atl.usd ?? null,
-      closes: [], // crypto detail already has a chart elsewhere
+      high52w: md.ath.usd ?? null,
+      low52w: md.atl.usd ?? null,
+      dayHigh: md.high_24h.usd ?? null,
+      dayLow: md.low_24h.usd ?? null,
+      closes,
+      stats,
+      performance,
       headlines: news.slice(0, 8).map((n) => ({
         id: n.id,
         title: n.title,
@@ -301,9 +386,36 @@ async function loadCrypto(coinId: string): Promise<AssetView | null> {
         ]),
       ),
     };
-  } catch {
+  } catch (err) {
+    console.error("[asset-detail] loadCrypto failed:", err);
     return null;
   }
+}
+
+function computePerformanceFromCloses(
+  closes: Array<number | null>,
+  current: number,
+): PerformanceBucket[] {
+  // The 1y chart we fetch has roughly 252 trading days (stocks) or 365
+  // (crypto/forex). Sample points by relative position.
+  const filtered = closes.filter((c): c is number => typeof c === "number");
+  const len = filtered.length;
+  function at(daysBack: number): number | null {
+    if (len === 0) return null;
+    // For Yahoo 1y daily, len ≈ 252. Map daysBack to an index from the end.
+    const fraction = Math.min(1, daysBack / 365);
+    const idx = Math.max(0, Math.floor(len - 1 - fraction * (len - 1)));
+    const past = filtered[idx];
+    if (!past || past <= 0) return null;
+    return ((current - past) / past) * 100;
+  }
+  return [
+    { label: "24h", value: at(1) },
+    { label: "7d", value: at(7) },
+    { label: "30d", value: at(30) },
+    { label: "90d", value: at(90) },
+    { label: "1y", value: at(365) },
+  ];
 }
 
 function formatYahooDate(unixSec: number): string {

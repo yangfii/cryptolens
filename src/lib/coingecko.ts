@@ -71,6 +71,27 @@ export async function searchCoins(query: string): Promise<
   return data.coins.slice(0, 10);
 }
 
+export type CoinChartPoint = [number, number]; // [timestamp_ms, price_usd]
+
+export async function getCoinChart(
+  id: string,
+  days = 30,
+  vsCurrency = "usd",
+): Promise<{ prices: CoinChartPoint[]; total_volumes: CoinChartPoint[] }> {
+  const params = new URLSearchParams({
+    vs_currency: vsCurrency,
+    days: String(days),
+  });
+  return cgFetch<{
+    prices: CoinChartPoint[];
+    market_caps: CoinChartPoint[];
+    total_volumes: CoinChartPoint[];
+  }>(`/coins/${id}/market_chart?${params}`, {
+    revalidate: 300,
+    tags: [`coin:${id}:chart:${days}`],
+  });
+}
+
 export async function getGlobalData(): Promise<{
   total_market_cap_usd: number;
   total_volume_usd: number;

@@ -116,12 +116,25 @@ export type YahooChart = {
   exchange: string | null;
   timestamps: number[]; // unix seconds
   closes: Array<number | null>;
+  fiftyTwoWeekHigh: number | null;
+  fiftyTwoWeekLow: number | null;
+  dayHigh: number | null;
+  dayLow: number | null;
+  volume: number | null;
+};
+
+type ExtendedMeta = SparkResultMeta & {
+  fiftyTwoWeekLow?: number;
+  fiftyTwoWeekHigh?: number;
+  regularMarketDayHigh?: number;
+  regularMarketDayLow?: number;
+  regularMarketVolume?: number;
 };
 
 type ChartResponse = {
   chart?: {
     result?: Array<{
-      meta: SparkResultMeta;
+      meta: ExtendedMeta;
       timestamp?: number[];
       indicators?: { quote?: Array<{ close?: Array<number | null> }> };
     }>;
@@ -158,6 +171,11 @@ export async function getChart(
     exchange: meta.exchangeName ?? null,
     timestamps: result.timestamp ?? [],
     closes: result.indicators?.quote?.[0]?.close ?? [],
+    fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh ?? null,
+    fiftyTwoWeekLow: meta.fiftyTwoWeekLow ?? null,
+    dayHigh: meta.regularMarketDayHigh ?? null,
+    dayLow: meta.regularMarketDayLow ?? null,
+    volume: meta.regularMarketVolume ?? null,
   };
 }
 
